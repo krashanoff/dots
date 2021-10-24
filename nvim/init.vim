@@ -1,7 +1,7 @@
 "
 " krashanoff
 "
-" A simple, uncomplicated Neovim setup.
+" Organization does not exist.
 "
 
 " better leader
@@ -16,7 +16,7 @@ call plug#begin('~/.config/nvim/plugged')
 
     Plug 'folke/twilight.nvim'
     Plug 'folke/zen-mode.nvim'
-    Plug 'vim-airline/vim-airline'
+    Plug 'itchyny/lightline.vim'
 
     " general qol
     Plug 'preservim/nerdcommenter'
@@ -32,11 +32,12 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
 
-    " completion, language analysis, linting
-    " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    " Plug 'dense-analysis/ale'
-
-    " tags, navigation
+    " LSP stuff
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'onsails/lspkind-nvim'
     Plug 'liuchengxu/vista.vim'
 
     " completely unnecessary
@@ -52,11 +53,63 @@ colorscheme deus
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+" lightline
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified', 'charvaluehex' ] ]
+      \ },
+      \ 'component': {
+      \   'charvaluehex': '0x%B'
+      \ },
+      \ }
+
+" neovide options
+let g:neovide_refresh_rate = 60
+let g:neovide_fullscreen = v:true
+set guifont=FiraCode\ Nerd\ Font:h14
 
 lua << EOF
   require("twilight").setup {
   }
   require("zen-mode").setup {
+  }
+
+  -- Set up LSP stuff.
+  local lspkind = require('lspkind')
+  local cmp = require('cmp')
+  cmp.setup {
+    snippet = {
+      expand = function(args)
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+      end,
+    },
+    mapping = {
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    }),
+    formatting = {
+        format = lspkind.cmp_format({with_text = false, maxwidth = 50})
+    }
   }
 EOF
 
@@ -64,7 +117,7 @@ EOF
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>ft <cmd>Telescope tags<cr>
-nnoremap <leader>fr <cmd>Telescope registers<cr>
+nnoremap <leader>fr <cmd>Telescope registers<cr><ESC>
 nnoremap <leader>fb <cmd>Telescope buffers<cr><esc>
 nnoremap <leader>fm <cmd>Telescope marks<cr><esc> " press esc after to ensure we just browse marks.
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -76,12 +129,19 @@ nnoremap <leader>ts :Telescope
 
 nnoremap <silent><leader>n :new<cr>
 
-syntax on
+if !exists('g:syntax-on')
+    syntax on
+end
 set ruler               " Show the line and column numbers of the cursor.
 set formatoptions+=o    " Continue comment marker in new lines.
 set textwidth=0         " Hard-wrap long lines as you type them.
-set modeline            " Enable modeline.
-set number relativenumber
+if exists('g:lightline')
+    set noshowmode  " lightline thing.
+else
+    set showmode
+end
+set modeline    " Enable modeline.
+set number
 set linespace=0         " Set line-spacing to minimum.
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
 " More natural splits
@@ -98,7 +158,6 @@ set nostartofline       " Do not jump to first character with page commands.
 set noerrorbells                " No beeps
 set backspace=indent,eol,start  " Makes backspace key more powerful.
 set showcmd                     " Show me what I'm typing
-set showmode                    " Show current mode.
 set noswapfile                  " Don't use swapfile
 set nobackup            	" Don't create annoying backup files
 set encoding=utf-8              " Set default encoding to UTF-8
@@ -117,25 +176,86 @@ set gdefault            " Use 'g' flag by default with :s/foo/bar/.
 set magic               " Use 'magic' patterns (extended regular expressions).
 
 " hot reload
-:nnoremap <silent><leader>src :source $HOME/.config/nvim/init.vim<cr>
+nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
+
+" ez edit
+nnoremap <silent><leader>ini :e ~/.config/nvim/init.vim<cr>
 
 """"""""
 " CORE "
 """"""""
 let &shortmess = 'filnxtToOFI'
 let &showbreak = '\'
-" TODO: Set the SHADA properly. set shada = '2000,f1,<500'
 set hidden
 set nowritebackup
 
-nnoremap <silent><leader>L :nohl<cr>
-nnoremap <silent><leader>w :w<cr>
+autocmd! VimLeave * mksession! ~/Session.vim
+autocmd! VimEnter * source ~/Session.vim
+
+" switch to buffer
+nnoremap <silent><expr> , ':b' . v:count1 . '<C-M>'
+
+" TODO: remap ' to input register for command.
+
+" try to load a session in the current directory, if there
+" is one.
+nnoremap <silent><leader>lo source ./Session.vim
+
+" break out of ter
+tnoremap <silent><leader><leader> <C-\><C-n><ESC>
+
+" adjust window layout
+nnoremap <silent>= <C-w>=
+nnoremap <silent>- <C-w>-
+nnoremap <silent>+ <C-w>+
+nnoremap <silent>< <C-w><
+nnoremap <silent>> <C-w>>
+
+" cycle buffers
+nnoremap <silent><leader>n :bn<cr>
+nnoremap <silent><leader>p :bp<cr>
+
+" break out of insert with movement
+" also allow this movement in normal mode
+" TODO: allow contextual movement. If only on single buffer,
+" then motion, else move between windows.
+inoremap <silent><C-l> <ESC>l
+inoremap <silent><C-k> <ESC>k
+inoremap <silent><C-j> <ESC>j
+inoremap <silent><C-h> <ESC>h
+inoremap <silent><leader>l <ESC>l
+inoremap <silent><leader>k <ESC>k
+inoremap <silent><leader>j <ESC>j
+inoremap <silent><leader>h <ESC>h
+nnoremap <silent><C-l> l
+nnoremap <silent><C-k> k
+nnoremap <silent><C-j> j
+nnoremap <silent><C-h> h
+
+nnoremap <silent><leader>l :nohl<cr>
+nnoremap <silent><leader>W :w<cr>
+nnoremap <silent><leader>r :set relativenumber!<cr>
+inoremap <silent><leader>r <ESC>:set relativenumber!<cr>a
+nnoremap <silent><leader>r :set relativenumber!<cr>
+inoremap <silent><leader>z <ESC>zzi
+nnoremap <silent><leader>z zz
+inoremap <leader>: <ESC>:
+
+" TODO: visual mapping of this binding.
+vnoremap <silent><leader>r <ESC>:set relativenumber!<cr>
+
+" cancel operator pending with tab.
+onoremap <silent><Tab> <ESC>
+nnoremap <silent><leader>Z :ZenMode<cr>
+
+" deleting, killing buffers
+nnoremap <silent><leader>b :bd<cr>
+nnoremap <silent><leader>q :q<cr>
 
 """"""""""""
 " MOVEMENT "
 """"""""""""
-:nnoremap GG G$ " easy end-of-file
-nnoremap " TODO: mapping for going to the end of a line.
+nnoremap <silent><leader>E G$ " easy end-of-file
 nnoremap go :<c-u>echo "count is " . v:count<cr>
 
 " moving lines
@@ -147,44 +267,30 @@ nnoremap <silent><A-k> :m-2<cr>==
 vnoremap <silent><A-j> :m '>+1<cr>gv=gv
 vnoremap <silent><A-k> :m '<-2<cr>gv=gv
 
-" movement from within insert mode
-inoremap <silent><C-h> <ESC>h i
-inoremap <silent><C-j> <ESC>j i
-inoremap <silent><C-k> <ESC>k i
-inoremap <silent><C-l> <ESC>l i
-
 inoremap <silent><Leader><Leader> <ESC> " break out of insert ez
-tnoremap <silent><Leader><Leader> <ESC>
-inoremap <Leader>w <ESC>:up<cr>a
+inoremap <Leader>w <ESC>:up<cr>
 nnoremap <Leader>w :up<cr>
 nnoremap w :up<cr>
 
 " window switching
-:tnoremap <C-h> <C-\><C-n><C-w>h
-:tnoremap <C-j> <C-\><C-n><C-w>j
-:tnoremap <C-k> <C-\><C-n><C-w>k
-:tnoremap <C-l> <C-\><C-n><C-w>l
-:nnoremap <C-h> <C-w>h
-:nnoremap <C-j> <C-w>j
-:nnoremap <C-k> <C-w>k
-:nnoremap <C-l> <C-w>l
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " tab creation
-:inoremap <silent><leader>t <Esc>:tabnew<cr>
-:nnoremap <silent><leader>t :tabnew<cr>
-:nnoremap <silent><C-w>t :tabnew<cr>
+inoremap <silent><leader>t <Esc>:tabnew<cr>
+nnoremap <silent><leader>t :tabnew<cr>
+nnoremap <silent><C-w>t :tabnew<cr>
 
 " terminal ease-of-use
-:autocmd TermOpen * setlocal statusline=%{b:term_title}
-:tnoremap <Esc> <C-\><C-n>
+autocmd TermOpen * setlocal statusline=%{b:term_title}
+tnoremap <Esc> <C-\><C-n>
 
 " CHADtree
-:nnoremap <silent><leader>T :CHADopen<cr>
-
-""""""""""""""""
-" OTHER CONFIGS "
-""""""""""""""""
-" source completion.vim
-" source nav.vim
-" source neovide.vim
+nnoremap <silent><leader>T :CHADopen<cr>
 
