@@ -14,9 +14,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'altercation/vim-colors-solarized'
     Plug 'vim-airline/vim-airline-themes'
 
-    Plug 'folke/twilight.nvim'
-    Plug 'folke/zen-mode.nvim'
-    Plug 'itchyny/lightline.vim'
+    Plug 'vim-airline/vim-airline'
 
     " general qol
     Plug 'preservim/nerdcommenter'
@@ -40,10 +38,13 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'onsails/lspkind-nvim'
     Plug 'liuchengxu/vista.vim'
 
-    " completely unnecessary
-    Plug 'justinmk/vim-sneak'
+    " absolutely unnecessary
     Plug 'psliwka/vim-smoothie'
+    Plug 'junegunn/goyo.vim'
+    Plug 'junegunn/limelight.vim'
 call plug#end()
+
+set guifont=FiraCode\ Nerd\ Font:h14
 
 " setup twilight and color schemes
 set background=dark
@@ -55,31 +56,25 @@ colorscheme deus
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-" lightline
-set noshowmode
+" lightline, if I'm using it
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified', 'charvaluehex' ] ]
-      \ },
-      \ 'component': {
-      \   'charvaluehex': '0x%B'
-      \ },
+      \             [ 'readonly', 'filename', 'modified' ] ]
+      \ }
       \ }
 
 " neovide options
 let g:neovide_refresh_rate = 60
 let g:neovide_fullscreen = v:true
-set guifont=FiraCode\ Nerd\ Font:h14
+let g:neovide_input_use_logo = v:true
+
+" goyo config
+nnoremap <silent><leader>G :Goyo<cr>
 
 lua << EOF
-  require("twilight").setup {
-  }
-  require("zen-mode").setup {
-  }
-
-  -- Set up LSP stuff.
+ -- Set up LSP stuff.
   local lspkind = require('lspkind')
   local cmp = require('cmp')
   cmp.setup {
