@@ -24,10 +24,21 @@ call plug#begin(g:plug_directory)
     Plug 'tpope/vim-fugitive'
     Plug 'folke/which-key.nvim'
 
-    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':CHADdeps'}
 
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-lua/telescope.nvim'
+
+    " colors and aesthetics
+    Plug 'ajmwagar/vim-deus'
+    Plug 'NLKNguyen/papercolor-theme'
+    Plug 'morhetz/gruvbox'
+
+    " Smoother, easier
+    " Plug 'psliwka/vim-smoothie'
+    " Plug 'junegunn/limelight.vim'
+    " Plug 'folke/zen-mode.nvim'
+    Plug 'junegunn/goyo.vim'
 call plug#end()
 
 " Automatically create and work with sessions.
@@ -184,10 +195,6 @@ function! FloatingLazyGit() abort
     if chan == 0
       echom "Error opening terminal"
     endif
-
-    echom "Lazygit"
-    nvim_chan_send(v:chan, "i")
-    nvim_chan_send(v:chan, "lazygit\r")
 endfunction
 nnoremap <silent><leader>G :call FloatingLazyGit()<cr>
 
@@ -195,9 +202,7 @@ nnoremap <silent><leader>G :call FloatingLazyGit()<cr>
 nnoremap <silent><leader>T :CHADopen<cr>
 
 " Load additional configurations.
-exec 'source ' . "$XDG_CONFIG_HOME/nvim/base.vim"
-exec 'source ' . "$XDG_CONFIG_HOME/nvim/feel.vim"
-exec 'source ' . "$XDG_CONFIG_HOME/nvim/statusline.vim"
+exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
+exec 'source ' . $XDG_CONFIG_HOME . '/nvim/feel.vim'
+exec 'source ' . $XDG_CONFIG_HOME . '/nvim/statusline.vim'
 
-" From: https://stackoverflow.com/a/18734557
-let path=fnamemodify(resolve(expand('<sfile>:p')), ':h')
