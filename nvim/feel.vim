@@ -6,7 +6,7 @@
 
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 0
-colorscheme PaperColor
+colorscheme deus
 
 " goyo config
 nnoremap <silent><leader>Z :Goyo<cr>

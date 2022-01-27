@@ -20,6 +20,9 @@ nnoremap <silent><leader>ini :e ~/.config/nvim/init.vim<cr>
 
 " Load the bare-minimum quality of life plugins for all systems.
 call plug#begin(g:plug_directory)
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+
     Plug 'kshenoy/vim-signature'
     Plug 'tpope/vim-fugitive'
     Plug 'folke/which-key.nvim'
@@ -40,11 +43,6 @@ call plug#begin(g:plug_directory)
     " Plug 'folke/zen-mode.nvim'
     Plug 'junegunn/goyo.vim'
 call plug#end()
-
-" Automatically create and work with sessions.
-" autocmd! VimLeave * mksession! ./.vimsession
-" autocmd! VimEnter * source ./.vimsession
-" nnoremap <silent><leader>S :source ./.vimsession<cr>
 
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
@@ -127,7 +125,7 @@ nnoremap <silent><A-k> :m-2<cr>==
 vnoremap <silent><A-j> :m '>+1<cr>gv=gv
 vnoremap <silent><A-k> :m '<-2<cr>gv=gv
 
-inoremap <silent><leader><leader> <ESC> " break out of insert ez
+inoremap <silent><leader><leader> <C-\><C-n>
 inoremap <leader>w <ESC>:up<cr>
 nnoremap <leader>w :up<cr>
 
@@ -172,31 +170,6 @@ nnoremap <leader>fr <cmd>Telescope registers<cr><esc>
 nnoremap <leader>fb <cmd>Telescope buffers<cr><esc>
 nnoremap <leader>fm <cmd>Telescope marks<cr><esc> " press esc after to ensure we just browse marks.
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
-" Git views
-function! FloatingLazyGit() abort
-    " Define the size of the floating window
-    let width = 100
-    let height = 100
-
-    let buf = nvim_create_buf(v:false, v:true)
-    let ui = nvim_list_uis()[0]
-    let opts = {'relative': 'editor',
-                \ 'width': width,
-                \ 'height': height,
-                \ 'col': (ui.width/2) - (width/2),
-                \ 'row': (ui.height/2) - (height/2),
-                \ 'anchor': 'NW',
-                \ 'style': 'minimal',
-                \ }
-    let win = nvim_open_win(buf, 1, opts)
-
-    let chan = nvim_open_term(buf, {})
-    if chan == 0
-      echom "Error opening terminal"
-    endif
-endfunction
-nnoremap <silent><leader>G :call FloatingLazyGit()<cr>
 
 " CHADtree
 nnoremap <silent><leader>T :CHADopen<cr>
