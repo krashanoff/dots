@@ -1,6 +1,0 @@
-[status]
-disabled = false
-
-[cmd_duration]
-min_time = 5_000
-
