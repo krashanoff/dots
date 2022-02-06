@@ -2,3 +2,6 @@
 	path = nvim/autoload
 	url = git@github.com:junegunn/vim-plug.git
 
+[submodule "fish/bass"]
+	path = fish/bass
+	url = git@github.com:edc/bass.git

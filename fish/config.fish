@@ -13,4 +13,3 @@ set -Ux fish_user_paths $HOME/.cargo/bin
 
 # Vars
 set -Ux EDITOR nvim
-

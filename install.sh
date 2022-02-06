@@ -1,10 +1,9 @@
 #!/bin/sh
 #
-# TODO: nvm, rustup, rclone, python3
+# TODO: python3
 #
 
-REQUIREMENTS_UBUNTU="build-essential fish neovim"
-REQUIREMENTS_DARWIN="fish neovim"
+REQUIREMENTS_DARWIN="fish neovim rclone"
 DRY=""
 
 # Log an error message to stderr.
@@ -23,12 +22,33 @@ Run() {
   fi
 }
 
+# Nvm is weird
+InstallNvm() {
+  Logerr "Installing nvm..."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | sh
+}
+
+InstallRustup() {
+  curl https://sh.rustup.rs -sSf | sh -s
+}
+
 InstallDepsLinux() {
   # Ubuntu
   if command -v lsb_release >/dev/null
   then
+    # Ubuntu stuff is always outdated, so we have to install a lot
+    # of things manually.
     Logerr "Selected Ubuntu"
-    Run sudo apt install -y "$REQUIREMENTS_DARWIN"
+    Run sudo apt install -y "build-essential"
+
+    # Fish
+    Run sudo apt-add-repository ppa:fish-shell/release-3
+    Run sudo apt update
+    Run sudo apt install fish
+
+    # rclone
+    curl https://rclone.org/install.sh | sudo bash
+
     return
   fi
 
@@ -48,7 +68,8 @@ InstallDepsDarwin() {
   done
 }
 
-InstallDeps() {
+# Bootstrap the system with fish shell.
+Bootstrap() {
   Logerr "Detecting your platform..."
   case "$(uname)" in
     Darwin)
@@ -65,8 +86,11 @@ InstallDeps() {
   esac
 }
 
+# Install extra stuff (nvm, rustup, ...)
 InstallExtra() {
   Logerr "Installing extra stuff (submodules, etc.)"
+  InstallNvm
+  InstallRustup
 
   Logerr "Updating submodules..."
   Run git submodule update --recursive
@@ -90,5 +114,5 @@ do
   shift
 done
 
-InstallDeps
+Bootstrap
 InstallExtra
