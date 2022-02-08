@@ -3,6 +3,7 @@ function fish_prompt
 
     if not set -q -g __fish_arrow_functions_defined
         set -g __fish_arrow_functions_defined
+
         function _git_branch_name
             set -l branch (git symbolic-ref --quiet HEAD 2>/dev/null)
             if set -q branch[1]
@@ -78,12 +79,17 @@ function fish_prompt
     set -l repo_info
     if set -l repo_type (_repo_type)
         set -l repo_branch $red(_repo_branch_name $repo_type)
-        set repo_info "$blue $repo_type:($repo_branch$blue)"
+        set repo_info "$green $repo_type:("
 
         if _is_repo_dirty $repo_type
-            set -l dirty "$yellow ✗"
+            set -l dirty "$yellow!="
             set repo_info "$repo_info$dirty"
+        else
+            set -l other "$yellow=="
+            set repo_info "$repo_info$other"
         end
+
+        set repo_info "$repo_info$repo_branch$green)"
     end
 
     echo -n -s $arrow ' '$cwd $repo_info $normal ' '

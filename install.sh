@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# TODO: python3
+# TODO: nvm, rustup, rclone, python3, bat, delta
 #
 
 REQUIREMENTS_DARWIN="fish neovim rclone"

@@ -1,5 +1,7 @@
 "
 " Base settings
+" 
+" The bare minimum for my vim install to be liveable.
 "
 
 "
@@ -66,3 +68,4 @@ let &shortmess = 'filnxtToOFI'
 let &showbreak = '\'
 set hidden
 set nowritebackup
+

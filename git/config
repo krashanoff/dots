@@ -22,3 +22,5 @@
 	decorate = true
 [merge]
   conflictstyle = diff3
+[pull]
+	rebase = false
