@@ -69,3 +69,8 @@ let &showbreak = '\'
 set hidden
 set nowritebackup
 
+" break at the word
+set breakindent
+set formatoptions=l
+set lbr
+
