@@ -60,6 +60,10 @@ set autoindent
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab " indent with spaces.
 set gdefault            " Use 'g' flag by default with :s/foo/bar/.
 set magic               " Use 'magic' patterns (extended regular expressions).
+set wrap
+
+set cc=+1
+hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 
 set splitbelow                  " Horizontal split below current.
 set splitright                  " Vertical split to right of current.
