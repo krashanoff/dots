@@ -61,6 +61,7 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab " indent with spaces
 set gdefault            " Use 'g' flag by default with :s/foo/bar/.
 set magic               " Use 'magic' patterns (extended regular expressions).
 set wrap
+set list
 
 set cc=+1
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey

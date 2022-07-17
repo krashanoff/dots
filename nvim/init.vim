@@ -48,13 +48,18 @@ call plug#begin(g:plug_directory)
     Plug 'ajmwagar/vim-deus'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'morhetz/gruvbox'
+    Plug 'sainnhe/sonokai'
 
     " Smoother, easier
     " Plug 'psliwka/vim-smoothie'
     " Plug 'junegunn/limelight.vim'
     " Plug 'folke/zen-mode.nvim'
+    " Plug 'justinmk/vim-sneak'
     Plug 'junegunn/goyo.vim'
 call plug#end()
+
+" my leader overrides sneak
+" nnoremap : <Plug>Sneak_;
 
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
@@ -117,7 +122,6 @@ vnoremap <silent><leader>r <ESC>:set relativenumber!<cr>
 " NOTE: trying to kill buffer number 1 will kill the buffer you are sitting
 " on. This is because the v:count1 variable defaults to 1 when a mapping is
 " fired.
-nnoremap <silent><expr> , ':b' . v:count1 . '<cr>'
 nnoremap <silent><expr> <leader>!b ':bd!' . (v:count1 != 1 ? v:count1 : "") . '<cr>'
 nnoremap <silent><expr> <leader>b ':bd' . (v:count1 != 1 ? v:count1 : "") . '<cr>'
 tnoremap <silent><expr> <leader>!b ':bd!' . (v:count1 != 1 ? v:count1 : "") . '<cr>'
