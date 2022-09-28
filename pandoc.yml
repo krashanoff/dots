@@ -1,0 +1,98 @@
+#
+# krashanoff
+#
+# the format I like my notes in.
+#
+
+from: "markdown\
+  +smart\
+  +auto_identifiers\
+  +blank_before_header\
+  +space_in_atx_header\
+  +implicit_header_references\
+  +line_blocks\
+  +fancy_lists\
+  +startnum\
+  +task_lists\
+  +pandoc_title_block\
+  +superscript\
+  +subscript\
+  +tex_math_dollars\
+  +tex_math_single_backslash"
+
+to: latex
+output-file: output.pdf
+
+standalone: true
+self-contained: false
+
+# note that structured variables may be specified:
+variables:
+  documentclass: article
+  classoption:
+    - 11pt
+    - letterpaper
+    - twosides
+  geometry:
+  - margin=1.5in
+
+resource-path: ["."]
+
+# citeproc, natbib, or biblatex
+cite-method: citeproc
+
+pdf-engine: pdflatex
+pdf-engine-opts:
+- "-shell-escape"
+
+# auto, preserve, or none
+wrap: auto
+columns: 78
+dpi: 72
+
+extract-media: mediadir
+
+table-of-contents: true
+toc-depth: 3
+number-sections: true
+# a list of offsets at each heading level
+number-offset: [0,0,0,0,0,0]
+# toc: may also be used instead of table-of-contents:
+section-divs: true
+identifier-prefix: foo
+strip-empty-paragraphs: true
+# lf, crlf, or native
+eol: native
+strip-comments: true
+indented-code-classes: []
+ascii: true
+default-image-extension: ".png"
+
+# method is plain, webtex, gladtex, mathml, mathjax, katex
+# you may specify a url with webtex, mathjax, katex
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+# none, references, or javascript
+email-obfuscation: javascript
+
+tab-stop: 2
+
+incremental: false
+slide-level: 2
+
+reference-links: true
+# block, section, or document
+reference-location: block
+markdown-headings: atx
+
+# accept, reject, or all
+track-changes: accept
+
+# none, all, or best
+ipynb-output: best
+
+fail-if-warnings: true
+dump-args: false
+ignore-args: false
+trace: false
