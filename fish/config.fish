@@ -13,3 +13,4 @@ set -Ux fish_user_paths $HOME/.cargo/bin
 
 # Vars
 set -Ux EDITOR nvim
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
