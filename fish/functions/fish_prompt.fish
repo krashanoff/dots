@@ -92,8 +92,13 @@ function fish_prompt
         set repo_info "$repo_info$repo_branch$green)"
     end
 
-    set -l hostname_parts (string split . (hostnamectl hostname))
-    set user_part $green(whoami)@$hostname_parts[1]
+    if test (uname) = "Darwin"
+	set hostname_parts (string split . (hostname))
+    else
+        set hostname_parts (string split . (hostnamectl hostname))
+    end
+    set -l whoami_part $cyan(whoami)
+    set user_part $whoami_part$green@$blue$hostname_parts[1]
 
-    echo -n -s $arrow $user_part ':'$cwd $repo_info $normal ' '
+    echo -n -s $arrow $user_part $green':'$cwd $repo_info $normal ' '
 end
