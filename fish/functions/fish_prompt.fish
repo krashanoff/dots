@@ -98,7 +98,7 @@ function fish_prompt
         set hostname_parts (string split . (hostnamectl hostname))
     end
     set -l whoami_part $cyan(whoami)
-    set user_part $whoami_part$green@$blue$hostname_parts[1]
+    set user_part $whoami_part$normal@$blue$hostname_parts[1]
 
-    echo -n -s $arrow $user_part $green':'$cwd $repo_info $normal ' '
+    echo -n -s $arrow $user_part $normal':'$green$cwd $repo_info $normal ' '
 end
