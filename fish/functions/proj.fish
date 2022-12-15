@@ -1,9 +1,9 @@
 function proj
     switch (uname)
         case Darwin
-            cd ~/Documents/project
+            cd $HOME/project
         case Linux
-            cd ~/proj
+            cd $HOME/project
         case '*'
             echo "Unsupported"
     end

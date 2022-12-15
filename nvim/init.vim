@@ -1,4 +1,4 @@
-"
+
 " krashanoff
 "
 
@@ -50,8 +50,10 @@ call plug#begin(g:plug_directory)
     Plug 'sainnhe/sonokai'
 
     " Smoother, easier
+    Plug 'ghillb/cybu.nvim'
+    Plug 'nvim-tree/nvim-web-devicons'
     " Plug 'psliwka/vim-smoothie'
-    " Plug 'junegunn/limelight.vim'
+    Plug 'junegunn/limelight.vim'
     " Plug 'folke/zen-mode.nvim'
     " Plug 'justinmk/vim-sneak'
     Plug 'junegunn/goyo.vim'
@@ -59,6 +61,14 @@ call plug#end()
 
 " my leader overrides sneak
 " nnoremap : <Plug>Sneak_;
+
+lua << EOF
+require('cybu').setup()
+vim.keymap.set('n', '[b', '<Plug>(CybuPrev)')
+vim.keymap.set('n', ']b', '<Plug>(CybuNext)')
+vim.keymap.set('n', '<s-tab>', '<plug>(CybuLastusedPrev)')
+vim.keymap.set('n', '<tab>', '<plug>(CybuLastusedNext)')
+EOF
 
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
@@ -89,18 +99,10 @@ nnoremap <silent><leader>n :bn<cr>
 nnoremap <silent><leader>p :bp<cr>
 
 " break out of insert with movement
-inoremap <silent><C-l> <ESC>l
-inoremap <silent><C-k> <ESC>k
-inoremap <silent><C-j> <ESC>j
-inoremap <silent><C-h> <ESC>h
 inoremap <silent><leader>l <ESC>l
 inoremap <silent><leader>k <ESC>k
 inoremap <silent><leader>j <ESC>j
 inoremap <silent><leader>h <ESC>h
-nnoremap <silent><C-l> l
-nnoremap <silent><C-k> k
-nnoremap <silent><C-j> j
-nnoremap <silent><C-h> h
 inoremap <silent><leader>$ <ESC>$
 inoremap <silent><leader>0 <ESC>0
 inoremap <silent><leader>e <ESC>e
@@ -147,6 +149,10 @@ inoremap <leader>w <ESC>:up<cr>
 nnoremap <leader>w :up<cr>
 
 " window switching
+inoremap <C-l> <C-\><C-n><C-w>l
+inoremap <C-k> <C-\><C-n><C-w>k
+inoremap <C-j> <C-\><C-n><C-w>j
+inoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-h> <C-\><C-n><C-w>h
 tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
