@@ -10,4 +10,5 @@ colorscheme sonokai
 
 " goyo config
 nnoremap <silent><leader>Z :Goyo<cr>
+nnoremap <silent><leader>L :Limelight!!<cr>
 
