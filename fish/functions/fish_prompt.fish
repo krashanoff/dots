@@ -70,7 +70,8 @@ function fish_prompt
     end
 
     set -l arrow "$arrow_color➜ "
-    if fish_is_root_user
+    set -l is_root (id -u)
+    if test $is_root = 0
         set arrow "$arrow_color# "
     end
 
@@ -95,7 +96,7 @@ function fish_prompt
     if test (uname) = "Darwin"
 	set hostname_parts (string split . (hostname))
     else
-        set hostname_parts (string split . (hostnamectl hostname))
+        set hostname_parts (string split . (hostname))
     end
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$blue$hostname_parts[1]
