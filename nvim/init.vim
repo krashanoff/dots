@@ -2,15 +2,15 @@
 " krashanoff
 "
 
-" Better leader
+" Better leader and sane defaults
 let mapleader = ";"
 inoremap <silent><leader><return> ;<return>
 
+" Disable mouse
+set mouse=
+
 " Cancel operations with tab.
 onoremap <silent><Tab> <ESC>
-
-" Plug directory
-let g:plug_directory = "~/.config/nvim/plugged"
 
 " hot reload
 nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
@@ -18,57 +18,18 @@ nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
 " ez edit
 nnoremap <silent><leader>ini :e ~/.config/nvim/init.vim<cr>
 
-" Set up plug
-" Run PlugInstall if there are missing plugins
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
+exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
 
-" Load the bare-minimum quality of life plugins for all systems.
-call plug#begin(g:plug_directory)
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
+" plugins
+lua require('plugins')
 
-    Plug 'kshenoy/vim-signature'
-    Plug 'tpope/vim-fugitive'
-    Plug 'folke/which-key.nvim'
+let g:github_colors_soft = 1
+let g:github_colors_block_diffmark = 0
+colorscheme sonokai
 
-    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': ':CHADdeps'}
-
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-lua/telescope.nvim'
-
-    " colors and aesthetics
-    Plug 'ajmwagar/vim-deus'
-    Plug 'NLKNguyen/papercolor-theme'
-    Plug 'morhetz/gruvbox'
-    Plug 'sainnhe/sonokai'
-
-    " Smoother, easier
-    Plug 'ghillb/cybu.nvim'
-    Plug 'nvim-tree/nvim-web-devicons'
-    " Plug 'psliwka/vim-smoothie'
-    Plug 'junegunn/limelight.vim'
-    " Plug 'folke/zen-mode.nvim'
-    " Plug 'justinmk/vim-sneak'
-    Plug 'junegunn/goyo.vim'
-call plug#end()
-
-" my leader overrides sneak
-" nnoremap : <Plug>Sneak_;
-
-lua << EOF
-require('cybu').setup()
-vim.keymap.set('n', '[b', '<Plug>(CybuPrev)')
-vim.keymap.set('n', ']b', '<Plug>(CybuNext)')
-vim.keymap.set('n', '<s-tab>', '<plug>(CybuLastusedPrev)')
-vim.keymap.set('n', '<tab>', '<plug>(CybuLastusedNext)')
-EOF
+" goyo config
+nnoremap <silent><leader>Z :Goyo<cr>
+nnoremap <silent><leader>L :Limelight!!<cr>
 
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
@@ -187,7 +148,11 @@ nnoremap <silent><leader>th :split<cr>:ter<cr>
 
 " fuzzy find remaps
 nnoremap <leader>ff <cmd>Telescope fd<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fG <cmd>Telescope live_grep<cr>
+nnoremap <leader>fgc <cmd>Telescope git_bcommits<cr>
+nnoremap <leader>fgb <cmd>Telescope git_branches<cr>
+nnoremap <leader>fgs <cmd>Telescope git_status<cr>
+nnoremap <leader>fgS <cmd>Telescope git_stash<cr>
 nnoremap <leader>ft <cmd>Telescope tags<cr>
 nnoremap <leader>fr <cmd>Telescope registers<cr><esc>
 nnoremap <leader>fb <cmd>Telescope buffers<cr><esc>
@@ -196,11 +161,5 @@ nnoremap <leader>fm <cmd>Telescope marks<cr><esc>
 nnoremap <leader>fM <cmd>Telescope man_pages<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" CHADtree
-nnoremap <silent><leader>T :CHADopen<cr>
-
-" Load additional configurations.
-exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
-exec 'source ' . $XDG_CONFIG_HOME . '/nvim/feel.vim'
-exec 'source ' . $XDG_CONFIG_HOME . '/nvim/statusline.vim'
+nnoremap <silent><leader>T :NvimTreeToggle<cr>
 

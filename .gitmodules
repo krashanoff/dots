@@ -1,4 +1,0 @@
-[submodule "nvim/autoload"]
-	path = nvim/autoload
-	url = git@github.com:junegunn/vim-plug.git
-
