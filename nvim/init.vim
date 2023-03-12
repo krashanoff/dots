@@ -148,7 +148,7 @@ nnoremap <silent><leader>th :split<cr>:ter<cr>
 
 " fuzzy find remaps
 nnoremap <leader>ff <cmd>Telescope fd<cr>
-nnoremap <leader>fG <cmd>Telescope live_grep<cr>
+nnoremap <leader>frg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fgc <cmd>Telescope git_bcommits<cr>
 nnoremap <leader>fgb <cmd>Telescope git_branches<cr>
 nnoremap <leader>fgs <cmd>Telescope git_status<cr>
@@ -162,4 +162,15 @@ nnoremap <leader>fM <cmd>Telescope man_pages<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 nnoremap <silent><leader>T :NvimTreeToggle<cr>
+
+" neovide stuff :)
+if exists("g:neovide")
+    nnoremap <D-v> "+p
+    inoremap <D-v> <ESC>"+pa
+    let g:neovide_floating_blur_amount_x = 2.0
+    let g:neovide_floating_blur_amount_y = 2.0
+    let g:neovide_refresh_rate = 60
+    let g:neovide_refresh_rate_idle = 5
+    let g:neovide_input_macos_alt_is_meta = v:true
+endif
 
