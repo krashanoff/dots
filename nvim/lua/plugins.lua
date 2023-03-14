@@ -17,9 +17,17 @@ return require('lazy').setup({
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
-  'folke/which-key.nvim',
+  -- 'folke/which-key.nvim',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
+  {
+        'Equilibris/nx.nvim',
+        dependencies = { 'nvim-telescope/telescope.nvim' },
+        config = function()
+            require('nx').setup({})
+        end,
+        lazy = true,
+  },
   {
         'sainnhe/sonokai',
         lazy = true,

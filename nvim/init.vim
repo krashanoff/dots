@@ -17,6 +17,8 @@ nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
 
 " ez edit
 nnoremap <silent><leader>ini :e ~/.config/nvim/init.vim<cr>
+nnoremap <silent><leader>iniv :e ~/.config/nvim/init.vim<cr>
+nnoremap <silent><leader>inil :e ~/.config/nvim/lua/plugins.lua<cr>
 
 exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
 
@@ -153,6 +155,10 @@ nnoremap <leader>fgc <cmd>Telescope git_bcommits<cr>
 nnoremap <leader>fgb <cmd>Telescope git_branches<cr>
 nnoremap <leader>fgs <cmd>Telescope git_status<cr>
 nnoremap <leader>fgS <cmd>Telescope git_stash<cr>
+nnoremap <leader>fws <cmd>Telescope lsp_workspace_symbols<cr>
+nnoremap <leader>fds <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <leader>fdd <cmd>Telescope diagnostics<cr>
+nnoremap <leader>fkm <cmd>Telescope keymaps<cr>
 nnoremap <leader>ft <cmd>Telescope tags<cr>
 nnoremap <leader>fr <cmd>Telescope registers<cr><esc>
 nnoremap <leader>fb <cmd>Telescope buffers<cr><esc>
