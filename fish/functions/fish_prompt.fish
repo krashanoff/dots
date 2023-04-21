@@ -24,6 +24,10 @@ function fish_prompt
             git rev-parse --git-dir >/dev/null 2>&1
         end
 
+        function _is_git_merging
+            git rev-list -1 MERGE_HEAD
+        end
+
         function _hg_branch_name
             echo (hg branch 2>/dev/null)
         end
@@ -93,6 +97,10 @@ function fish_prompt
         set repo_info "$repo_info$repo_branch$green)"
     end
 
+    set -l k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
+    set -l k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
+    set -l k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
+
     if test (uname) = "Darwin"
 	set hostname_parts (string split . (hostname))
     else
@@ -101,5 +109,6 @@ function fish_prompt
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$blue$hostname_parts[1]
 
+    echo -s $k8info
     echo -n -s $arrow $user_part $normal':'$green$cwd $repo_info $normal ' '
 end
