@@ -2,6 +2,9 @@
 " krashanoff
 "
 
+" Important pages:
+" - exclusive
+
 " Better leader and sane defaults
 let mapleader = ";"
 inoremap <silent><leader><return> ;<return>
@@ -93,6 +96,7 @@ tnoremap <silent><expr> <leader>b ':bd' . (v:count1 != 1 ? v:count1 : "") . '<cr
 
 " deleting, killing, and switching between windows.
 nnoremap <silent><leader>q :q<cr>
+nnoremap <silent>q<leader> q:
 
 " easy end-of-file
 nnoremap <silent><leader>E G$
@@ -134,9 +138,12 @@ nnoremap <silent><leader>Ws <C-w>-
 nnoremap <silent><leader>Wd <C-w>>
 nnoremap <silent><leader>Wq <C-w>=
 
-" tab creation
+" tab manipulation
 nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
+nnoremap <silent><leader>ts :tab split<cr>
+nnoremap <silent><C-;> :tabp<cr>
+nnoremap <silent><C-'> :tabN<cr>
 
 " Make the terminal better.
 tnoremap <esc> <c-\><c-n>
