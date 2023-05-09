@@ -13,10 +13,12 @@ set -Ux fish_user_paths $HOME/.cargo/bin
 
 # Vars
 set -Ux EDITOR nvim
-source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
 test -f ~/.kubectl_aliases.fish && source ~/.kubectl_aliases.fish
-glab completion -s fish | source
+
+if command -sq glab
+	glab completion -s fish | source
+end
 
 # Abbreviations
 function aa
@@ -41,3 +43,7 @@ function kube_change --on-event kubectx_postexec
 	echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
 end
 
+source $HOME/.asdf/asdf.fish
+mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
+
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env

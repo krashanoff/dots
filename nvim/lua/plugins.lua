@@ -20,6 +20,7 @@ return require('lazy').setup({
   -- 'folke/which-key.nvim',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
+  { 'willothy/flatten.nvim', config = true },
   {
         'Equilibris/nx.nvim',
         dependencies = { 'nvim-telescope/telescope.nvim' },
@@ -84,61 +85,61 @@ return require('lazy').setup({
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
     end,
   },
-  {
-    "hrsh7th/nvim-cmp",
-    -- load cmp on InsertEnter
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-    },
-    config = function()
-        local cmp = require'cmp'
-
-        cmp.setup({
-          snippet = {
-            expand = function(args)
-              require('luasnip').lsp_expand(args.body)
-            end,
-          },
-          window = {
-            completion = cmp.config.window.bordered(),
-            documentation = cmp.config.window.bordered(),
-          },
-          mapping = cmp.mapping.preset.insert({
-            ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-            ['<C-f>'] = cmp.mapping.scroll_docs(4),
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<Tab>'] = function(fallback)
-                if cmp.visible() then
-                    cmp.select_next_item()
-                else
-                    fallback()
-                end
-            end,
-            ['<S-Tab>'] = function(fallback)
-                cmp.close()
-            end,
-            ['<C-e>'] = cmp.mapping.abort(),
-            ['<CR>'] = function(fallback)
-                if cmp.visible() then
-                    cmp.confirm({ select = true })
-                else
-                    fallback()
-                end
-            end,
-          }),
-          sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-            { name = 'luasnip' },
-          }, {
-            { name = 'buffer' },
-          })
-      })
-    end,
-  },
+  -- {
+   --  "hrsh7th/nvim-cmp",
+--     -- load cmp on InsertEnter
+--     event = "InsertEnter",
+--     dependencies = {
+--       "hrsh7th/cmp-nvim-lsp",
+--       "hrsh7th/cmp-buffer",
+--       "L3MON4D3/LuaSnip",
+--       "saadparwaiz1/cmp_luasnip",
+--     },
+--     config = function()
+--         local cmp = require'cmp'
+-- 
+--         cmp.setup({
+--           snippet = {
+--             expand = function(args)
+--               require('luasnip').lsp_expand(args.body)
+--             end,
+--           },
+--           window = {
+--             completion = cmp.config.window.bordered(),
+--             documentation = cmp.config.window.bordered(),
+--           },
+--           mapping = cmp.mapping.preset.insert({
+--             ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+--             ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--             ['<C-Space>'] = cmp.mapping.complete(),
+--             ['<Tab>'] = function(fallback)
+--                 if cmp.visible() then
+--                     cmp.select_next_item()
+--                 else
+--                     fallback()
+--                 end
+--             end,
+--             ['<S-Tab>'] = function(fallback)
+--                 cmp.close()
+--             end,
+--             ['<C-e>'] = cmp.mapping.abort(),
+--             ['<CR>'] = function(fallback)
+--                 if cmp.visible() then
+--                     cmp.confirm({ select = true })
+--                 else
+--                     fallback()
+--                 end
+--             end,
+--           }),
+--           sources = cmp.config.sources({
+--             { name = 'nvim_lsp' },
+--             { name = 'luasnip' },
+--           }, {
+--             { name = 'buffer' },
+--           })
+--       })
+--     end,
+--   },
   {
       'nvim-tree/nvim-tree.lua',
       tag = 'nightly',
