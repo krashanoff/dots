@@ -100,7 +100,7 @@ gls.left[11] = {
   }
 }
 
-gls.mid[1] = {
+gls.left[12] = {
   ShowLspClient = {
     provider = 'GetLspClient',
     condition = function ()
@@ -110,7 +110,7 @@ gls.mid[1] = {
       end
       return true
     end,
-    icon = ' LSP:',
+    icon = ' ',
     highlight = {colors.cyan,colors.bg,'bold'}
   }
 }
@@ -137,7 +137,7 @@ gls.right[2] = {
 
 gls.right[3] = {
   GitIcon = {
-    provider = function() return '  ' end,
+    provider = function() return ' ' end,
     condition = condition.check_git_workspace,
     separator = ' ',
     separator_highlight = {'NONE',colors.bg},
@@ -154,6 +154,14 @@ gls.right[4] = {
 }
 
 gls.right[5] = {
+  GitSpacer = {
+    provider = function() return ' ' end,
+    condition = condition.check_git_workspace,
+    highlight = {colors.violet,colors.bg,'bold'},
+  }
+}
+
+gls.right[6] = {
   DiffAdd = {
     provider = 'DiffAdd',
     condition = condition.hide_in_width,
@@ -161,15 +169,15 @@ gls.right[5] = {
     highlight = {colors.green,colors.bg},
   }
 }
-gls.right[6] = {
+gls.right[7] = {
   DiffModified = {
     provider = 'DiffModified',
     condition = condition.hide_in_width,
-    icon = ' 柳',
+    icon = ' ▣ ',
     highlight = {colors.orange,colors.bg},
   }
 }
-gls.right[7] = {
+gls.right[8] = {
   DiffRemove = {
     provider = 'DiffRemove',
     condition = condition.hide_in_width,

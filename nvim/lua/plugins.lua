@@ -18,6 +18,7 @@ return require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
   -- 'folke/which-key.nvim',
+  'mfussenegger/nvim-dap',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
   { 'willothy/flatten.nvim', config = true },
@@ -32,6 +33,29 @@ return require('lazy').setup({
   {
         'sainnhe/sonokai',
         lazy = true,
+  },
+  {
+      'catppuccin/nvim',
+      name = "catppuccin",
+      cond = function() return vim.g.neovide ~= nil end,
+      config = function()
+          require('catppuccin').setup({
+              flavour = 'mocha',
+              background = {
+                  light = 'latte',
+                  dark = 'mocha',
+              },
+              styles = {
+                  comments = { 'italic' },
+              },
+              integrations = {
+                  cmp = true,
+                  gitsigns = true,
+                  nvimtree = true,
+                  telescope = true,
+              },
+          })
+      end,
   },
   {
       'nvim-treesitter/nvim-treesitter',
@@ -321,4 +345,7 @@ return require('lazy').setup({
       end
   }
 })
+
+-- color scheme :)
+-- vim.cmd.colorscheme "catppuccin"
 

@@ -30,7 +30,14 @@ lua require('plugins')
 
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 0
-colorscheme sonokai
+
+set background=dark
+
+if exists("g:neovide")
+    colorscheme catppuccin
+else
+    colorscheme sonokai
+endif
 
 " goyo config
 nnoremap <silent><leader>Z :Goyo<cr>
@@ -39,6 +46,10 @@ nnoremap <silent><leader>L :Limelight!!<cr>
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
 nnoremap <silent><C-z> u
+
+" change line endings
+command MakeLF :%s/\r//g
+command MakeCRLF :%s/\n/\r\n/g
 
 " quickly delete a bunch of stuff
 inoremap <silent><A-BS> <ESC>db
@@ -176,6 +187,13 @@ nnoremap <leader>fM <cmd>Telescope man_pages<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 nnoremap <silent><leader>T :NvimTreeToggle<cr>
+
+" debug
+nnoremap <silent><leader>dbb :lua require'dap'.toggle_breakpoint()<cr>
+nnoremap <silent><leader>dbc :lua require'dap'.continue()<cr>
+nnoremap <silent><leader>dbso :lua require'dap'.step_over()<cr>
+nnoremap <silent><leader>dbsi :lua require'dap'.step_into()<cr>
+nnoremap <silent><leader>dbii :lua require'dap'.repl.open()<cr>
 
 " neovide stuff :)
 if exists("g:neovide")

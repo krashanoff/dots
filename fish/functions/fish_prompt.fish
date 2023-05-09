@@ -97,9 +97,14 @@ function fish_prompt
         set repo_info "$repo_info$repo_branch$green)"
     end
 
-    set -l k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
-    set -l k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
-    set -l k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
+    set -l k8info
+    if test -e $HOME/.current_kubectx; and test -e $HOME/.current_kubens
+        set -l k8nsinfo
+        set -l k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
+        set -l k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
+        set -l k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
+        echo -s $k8info
+    end
 
     if test (uname) = "Darwin"
 	set hostname_parts (string split . (hostname))
@@ -109,6 +114,5 @@ function fish_prompt
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$blue$hostname_parts[1]
 
-    echo -s $k8info
     echo -n -s $arrow $user_part $normal':'$green$cwd $repo_info $normal ' '
 end
