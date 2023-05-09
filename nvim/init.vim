@@ -63,6 +63,7 @@ nnoremap <silent>> <C-w>>
 " cycle buffers
 nnoremap <silent><leader>n :bn<cr>
 nnoremap <silent><leader>p :bp<cr>
+nnoremap <silent><leader>O :only<cr>
 
 " break out of insert with movement
 inoremap <silent><leader>l <ESC>l
@@ -143,7 +144,7 @@ nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
 nnoremap <silent><leader>ts :tab split<cr>
 nnoremap <silent><C-;> :tabp<cr>
-nnoremap <silent><C-'> :tabN<cr>
+nnoremap <silent><C-'> :tabn<cr>
 
 " Make the terminal better.
 tnoremap <esc> <c-\><c-n>
