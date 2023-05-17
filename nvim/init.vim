@@ -108,7 +108,8 @@ tnoremap <silent><expr> <leader>b ':bd' . (v:count1 != 1 ? v:count1 : "") . '<cr
 
 " deleting, killing, and switching between windows.
 nnoremap <silent><leader>q :q<cr>
-nnoremap <silent>q<leader> q:
+" nnoremap <silent>q<leader> q: " this is kind of a dangerous mapping since it
+" overlaps with macro stuff.
 
 " easy end-of-file
 nnoremap <silent><leader>E G$
