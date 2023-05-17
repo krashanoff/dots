@@ -2,6 +2,8 @@
 ;; init file
 ;;
 
+(setq user-mail-address leo@krashanoff.com)
+
 (setq inhibit-splash-screen t)
 (menu-bar-mode -1)
 
