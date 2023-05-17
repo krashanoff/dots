@@ -37,6 +37,8 @@ aa hs helm show
 aa hse helm search
 aa hh helm history
 
+aa guivm neovide --multigrid
+
 # Need to add handlers to the config file instead of autoload
 function kube_change --on-event kubectx_postexec
 	echo -ns (/opt/homebrew/bin/kubectx -c) > $HOME/.current_kubectx
@@ -47,3 +49,4 @@ source $HOME/.asdf/asdf.fish
 mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
+
