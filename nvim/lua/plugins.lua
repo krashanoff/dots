@@ -1,5 +1,7 @@
 -- lua moment
 
+local keymap = vim.keymap.set
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -205,7 +207,6 @@ return require('lazy').setup({
     event = "BufRead",
     config = function()
       require("lspsaga").setup({})
-      local keymap = vim.keymap.set
 
       -- LSP finder - Find the symbol's definition
       -- If there is no definition, it will instead be hidden
@@ -342,6 +343,27 @@ return require('lazy').setup({
               vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
             end
           })
+      end
+  },
+  {
+      'nvim-orgmode/orgmode',
+      dependencies = { 'nvim-treesitter/nvim-treesitter' },
+      config = function()
+          require('orgmode').setup_ts_grammar()
+          require('nvim-treesitter.configs').setup {
+              -- If TS highlights are not enabled at all, or disabled via `disable` prop,
+              -- highlighting will fallback to default Vim syntax highlighting
+              highlight = {
+                enable = true,
+                -- Required for spellcheck, some LaTex highlights and
+                -- code block highlights that do not have ts grammar
+                additional_vim_regex_highlighting = {'org'},
+              },
+              ensure_installed = {'org'}, -- Or run :TSUpdate org
+          }
+          require('orgmode').setup{
+              org_agenda_files = { '~/org/**/*' },
+          }
       end
   }
 })

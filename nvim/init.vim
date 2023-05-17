@@ -52,8 +52,8 @@ command MakeLF :%s/\r//g
 command MakeCRLF :%s/\n/\r\n/g
 
 " quickly delete a bunch of stuff
-inoremap <silent><A-BS> <ESC>db
-nnoremap <silent><A-BS> db
+inoremap <silent><A-BS> <ESC>dvb
+nnoremap <silent><A-BS> dvb
 inoremap <silent><A-DEL> <ESC>dw
 nnoremap <silent><A-BS> dw
 inoremap <silent><C-BS> <ESC>d0
@@ -140,6 +140,20 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" window manipulation
+inoremap <C-H> <C-w>H
+inoremap <C-J> <C-w>J
+inoremap <C-K> <C-w>K
+inoremap <C-L> <C-w>L
+tnoremap <C-H> <C-\><C-n><C-w>H
+tnoremap <C-J> <C-\><C-n><C-w>J
+tnoremap <C-K> <C-\><C-n><C-w>K
+tnoremap <C-L> <C-\><C-n><C-w>L
+nnoremap <C-H> <C-w>H
+nnoremap <C-J> <C-w>J
+nnoremap <C-K> <C-w>K
+nnoremap <C-L> <C-w>L
 
 " More natural splits
 nnoremap <silent><leader>v <esc>:vsplit<cr>
