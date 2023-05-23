@@ -1,4 +1,4 @@
-
+"
 " krashanoff
 "
 
@@ -39,6 +39,14 @@ else
     colorscheme sonokai
 endif
 
+" I dont always like pressing shift, but sometimes it's
+" a necessary evil
+nnoremap q<leader> q:
+inoremap <S-BS> <C-w>
+
+" enter is good
+inoremap <silent><S-CR> <ESC>O
+
 " goyo config
 nnoremap <silent><leader>Z :Goyo<cr>
 nnoremap <silent><leader>L :Limelight!!<cr>
@@ -50,6 +58,10 @@ nnoremap <silent><C-z> u
 " change line endings
 command MakeLF :%s/\r//g
 command MakeCRLF :%s/\n/\r\n/g
+
+" emacs did a few things right tbh
+inoremap <silent><C-a> <ESC>0i
+inoremap <silent><C-e> <ESC>$a
 
 " quickly delete a bunch of stuff
 inoremap <silent><A-BS> <ESC>dvb
@@ -88,6 +100,8 @@ inoremap <silent><leader>w <ESC>w
 inoremap <silent><leader>b <ESC>b
 inoremap <silent><leader>I <ESC>I
 inoremap <silent><leader>A <ESC>A
+inoremap <silent><leader>o <ESC>o
+inoremap <silent><leader>O <ESC>O
 
 nnoremap <silent><leader>l :nohl<cr>
 nnoremap <silent><leader>r :set relativenumber!<cr>
@@ -143,18 +157,18 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " window manipulation
-inoremap <C-H> <C-w>H
-inoremap <C-J> <C-w>J
-inoremap <C-K> <C-w>K
-inoremap <C-L> <C-w>L
-tnoremap <C-H> <C-\><C-n><C-w>H
-tnoremap <C-J> <C-\><C-n><C-w>J
-tnoremap <C-K> <C-\><C-n><C-w>K
-tnoremap <C-L> <C-\><C-n><C-w>L
-nnoremap <C-H> <C-w>H
-nnoremap <C-J> <C-w>J
-nnoremap <C-K> <C-w>K
-nnoremap <C-L> <C-w>L
+inoremap <C-S-H> <C-w>H
+inoremap <C-S-J> <C-w>J
+inoremap <C-S-K> <C-w>K
+inoremap <C-S-L> <C-w>L
+tnoremap <C-S-H> <C-\><C-n><C-w>H
+tnoremap <C-S-J> <C-\><C-n><C-w>J
+tnoremap <C-S-K> <C-\><C-n><C-w>K
+tnoremap <C-S-L> <C-\><C-n><C-w>L
+nnoremap <C-S-H> <C-w>H
+nnoremap <C-S-J> <C-w>J
+nnoremap <C-S-K> <C-w>K
+nnoremap <C-S-L> <C-w>L
 
 " More natural splits
 nnoremap <silent><leader>v <esc>:vsplit<cr>
@@ -178,6 +192,13 @@ tnoremap <leader><leader> <c-\><c-n>
 
 autocmd TermOpen * setlocal statusline=%{b:term_title}
 
+" For some reason, COQ really doesn't like when you try to set the
+" keymap from Lua.
+autocmd VimEnter * :COQnow -s
+let g:coq_settings = { 'keymap.jump_to_mark': v:null }
+
+nnoremap <silent><leader>gg :Neogit<cr>
+
 nnoremap <silent><leader>tt :ter<cr>
 nnoremap <silent><leader>tv :vsplit<cr>:ter<cr>
 nnoremap <silent><leader>th :split<cr>:ter<cr>
@@ -200,8 +221,14 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr><esc>
 nnoremap <leader>fm <cmd>Telescope marks<cr><esc>
 nnoremap <leader>fM <cmd>Telescope man_pages<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fu <cmd>Telescope undo<cr>
 
-nnoremap <silent><leader>T :NvimTreeToggle<cr>
+nnoremap <silent><leader>B :Beacon<cr>
+
+" sneak maps my leader
+let g:sneak#s_next = 1
+map \ :Sneak_
+map , :Sneak
 
 " debug
 nnoremap <silent><leader>dbb :lua require'dap'.toggle_breakpoint()<cr>

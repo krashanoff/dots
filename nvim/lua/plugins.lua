@@ -2,6 +2,13 @@
 
 local keymap = vim.keymap.set
 
+local runtime_path = vim.split(package.path, ";")
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+-- Need to have 24-bit color enabled
+vim.opt.termguicolors = true
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -19,10 +26,54 @@ return require('lazy').setup({
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
-  -- 'folke/which-key.nvim',
   'mfussenegger/nvim-dap',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
+  'sainnhe/sonokai',
+  {
+      'phaazon/hop.nvim',
+      branch = 'v2',
+      config = function()
+          require'hop'.setup()
+      end,
+      init = function()
+          local hop = require('hop')
+          local directions = require('hop.hint').HintDirection
+
+          vim.keymap.set('', 'f', function()
+            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+          end, {remap=true})
+          vim.keymap.set('', 'F', function()
+            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+          end, {remap=true})
+          vim.keymap.set('', 't', function()
+            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+          end, {remap=true})
+          vim.keymap.set('', 'T', function()
+            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
+          end, {remap=true})
+
+          vim.keymap.set('', 's', function()
+              hop.hint_words()
+              -- hop.hint_char2({ direction = directions.AFTER_CURSOR, current_line_only = false })
+          end, {remap=true})
+          -- vim.keymap.set('', 'S', function()
+          --     hop.hint_char2({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+          -- end, {remap=true})
+      end,
+  },
+  {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup({
+          triggers_blacklist = {
+              i = { "<leader>" },
+          },
+      })
+    end,
+  },
   { 'willothy/flatten.nvim', config = true },
   {
         'Equilibris/nx.nvim',
@@ -35,6 +86,18 @@ return require('lazy').setup({
   {
         'sainnhe/sonokai',
         lazy = true,
+  },
+  {
+      'DanilaMihailov/beacon.nvim',
+      enabled = function()
+          return vim.g.neovide ~= nil
+      end,
+  },
+  {
+      'rcarriga/nvim-notify',
+      config = function()
+          vim.notify = require("notify")
+      end
   },
   {
       'catppuccin/nvim',
@@ -51,10 +114,15 @@ return require('lazy').setup({
                   comments = { 'italic' },
               },
               integrations = {
-                  cmp = true,
                   gitsigns = true,
+                  beacon = true,
+                  neogit = true,
+                  gitgutter = true,
+                  which_key = true,
                   nvimtree = true,
                   telescope = true,
+                  hop = true,
+                  lsp_saga = true,
               },
           })
       end,
@@ -66,7 +134,23 @@ return require('lazy').setup({
   {
     'nvim-telescope/telescope.nvim',
     tag = '0.1.1',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        'debugloop/telescope-undo.nvim',
+    },
+    config = function()
+        require('telescope').setup({
+            extensions = {
+                undo = {
+                    use_delta = true,
+                },
+            },
+        })
+        require("telescope").load_extension("undo")
+    end,
+  },
+  {
+      "debugloop/telescope-undo.nvim",
   },
   {
       'glepnir/galaxyline.nvim',
@@ -79,8 +163,25 @@ return require('lazy').setup({
       dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   {
+      'TimUntersberger/neogit',
+      dependencies = {
+          'sindrets/diffview.nvim',
+          'nvim-lua/plenary.nvim',
+      },
+      setup = function()
+          local neogit = require('neogit')
+          neogit.setup {
+              integrations = {
+                  diffview = true,
+              },
+          }
+      end,
+  },
+  {
       'lewis6991/gitsigns.nvim',
-      config = 'require(\'gitsigns\').setup()',
+      config = function()
+          require'gitsigns'.setup()
+      end,
       dependencies = { 'nvim-lua/plenary.nvim' }
   },
   {
@@ -111,61 +212,164 @@ return require('lazy').setup({
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
     end,
   },
+  {
+      'ms-jpq/coq_nvim',
+      dependencies = { 'neovim/nvim-lspconfig' },
+      branch = 'coq',
+      setup = function()
+      end,
+      config = function()
+          local lspconfig = require'lspconfig'
+          local coq = require'coq'
+          local util = require'lspconfig/util'
+
+          -- Gopls
+          lspconfig.gopls.setup(coq.lsp_ensure_capabilities {
+            cmd = {"gopls", "serve"},
+            filetypes = {"go", "gomod"},
+            root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+            settings = {
+              gopls = {
+                analyses = {
+                  unusedparams = true,
+                },
+                staticcheck = true,
+              },
+            },
+          })
+
+          -- Clang
+          lspconfig.clangd.setup(coq.lsp_ensure_capabilities{})
+
+          -- Typescript
+          lspconfig.tsserver.setup(coq.lsp_ensure_capabilities{})
+
+          -- Python
+          lspconfig.pyright.setup(coq.lsp_ensure_capabilities{})
+
+          -- Lua
+          lspconfig.lua_ls.setup(coq.lsp_ensure_capabilities{
+              settings = {
+                  Lua = {
+                      runtime = {
+                          version = 'LuaJIT',
+                      },
+                      diagnostics = {
+                          globals = {'vim'},
+                      },
+                      workspace = {
+                          library = vim.api.nvim_get_runtime_file("", true),
+                      },
+                      telemetry = {
+                          enable = false,
+                      },
+                  },
+              },
+          })
+
+          local api = vim.api
+          api.nvim_create_autocmd('BufWritePre', {
+            pattern = '*.go',
+            callback = function()
+              vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+            end
+          })
+      end,
+  },
+  {
+      'ms-jpq/coq.artifacts',
+      branch = 'artifacts',
+  },
+  {
+      'ms-jpq/coq.thirdparty',
+      branch = '3p',
+  },
+  -- 'hrsh7th/cmp-nvim-lsp',
+  -- 'hrsh7th/cmp-buffer',
+  -- 'hrsh7th/cmp-path',
+  -- 'hrsh7th/cmp-cmdline',
   -- {
-   --  "hrsh7th/nvim-cmp",
---     -- load cmp on InsertEnter
---     event = "InsertEnter",
---     dependencies = {
---       "hrsh7th/cmp-nvim-lsp",
---       "hrsh7th/cmp-buffer",
---       "L3MON4D3/LuaSnip",
---       "saadparwaiz1/cmp_luasnip",
---     },
---     config = function()
---         local cmp = require'cmp'
--- 
---         cmp.setup({
---           snippet = {
---             expand = function(args)
---               require('luasnip').lsp_expand(args.body)
---             end,
---           },
---           window = {
---             completion = cmp.config.window.bordered(),
---             documentation = cmp.config.window.bordered(),
---           },
---           mapping = cmp.mapping.preset.insert({
---             ['<C-b>'] = cmp.mapping.scroll_docs(-4),
---             ['<C-f>'] = cmp.mapping.scroll_docs(4),
---             ['<C-Space>'] = cmp.mapping.complete(),
---             ['<Tab>'] = function(fallback)
---                 if cmp.visible() then
---                     cmp.select_next_item()
---                 else
---                     fallback()
---                 end
---             end,
---             ['<S-Tab>'] = function(fallback)
---                 cmp.close()
---             end,
---             ['<C-e>'] = cmp.mapping.abort(),
---             ['<CR>'] = function(fallback)
---                 if cmp.visible() then
---                     cmp.confirm({ select = true })
---                 else
---                     fallback()
---                 end
---             end,
---           }),
---           sources = cmp.config.sources({
---             { name = 'nvim_lsp' },
---             { name = 'luasnip' },
---           }, {
---             { name = 'buffer' },
---           })
---       })
---     end,
---   },
+  --     'hrsh7th/nvim-cmp',
+  --     config = function ()
+  --         local cmp = require'cmp'
+  --         cmp.setup({
+  --             snippet = {
+  --                 expand = function(args)
+  --                     require('luasnip').lsp_expand(args.body)
+  --                 end,
+  --             },
+  --             mapping = cmp.mapping.preset.insert({
+  --                 ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+  --                 ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  --                 ['<C-Space>'] = cmp.mapping.complete(),
+  --                 ['<C-e>'] = cmp.mapping.abort(),
+  --                 ['<CR>'] = cmp.mapping.confirm({ select = false }),
+  --             }),
+  --             sources = cmp.config.sources({
+  --                 { name = 'nvim_lsp' },
+  --                 { name = 'luasnip' },
+  --             }, {
+  --                 { name = 'buffer' },
+  --             })
+  --         })
+
+  --         local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  --         local lspconfig = require('lspconfig')
+  --         local util = require('lspconfig/util')
+
+  --          -- Gopls
+  --          lspconfig.gopls.setup({
+  --            capabilities = capabilities,
+  --            cmd = {"gopls", "serve"},
+  --            filetypes = {"go", "gomod"},
+  --            root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  --            settings = {
+  --              gopls = {
+  --                analyses = {
+  --                  unusedparams = true,
+  --                },
+  --                staticcheck = true,
+  --              },
+  --            },
+  --          })
+
+  --          -- Clang
+  --          lspconfig.clangd.setup({
+  --            capabilities = capabilities,
+  --          })
+
+  --          -- Typescript
+  --          lspconfig.tsserver.setup({
+  --            capabilities = capabilities,
+  --          })
+
+  --          -- Python
+  --          lspconfig.pyright.setup({
+  --            capabilities = capabilities,
+  --          })
+
+  --          -- Lua
+  --          lspconfig.lua_ls.setup({
+  --              capabilities = capabilities,
+  --              settings = {
+  --                  Lua = {
+  --                      runtime = {
+  --                          version = 'LuaJIT',
+  --                      },
+  --                      diagnostics = {
+  --                          globals = {'vim'},
+  --                      },
+  --                      workspace = {
+  --                          library = vim.api.nvim_get_runtime_file("", true),
+  --                      },
+  --                      telemetry = {
+  --                          enable = false,
+  --                      },
+  --                  },
+  --              },
+  --          })
+  --     end,
+  -- },
   {
       'nvim-tree/nvim-tree.lua',
       tag = 'nightly',
@@ -182,7 +386,15 @@ return require('lazy').setup({
                   ignore = false,
               },
           })
-      end
+      end,
+      init = function ()
+          keymap('n', '<leader>T', function()
+              local api = require'nvim-tree.api'
+              api.tree.toggle({
+                  ['find_file'] = true,
+              })
+          end)
+      end,
   },
   {
       'ghillb/cybu.nvim',
@@ -218,7 +430,7 @@ return require('lazy').setup({
       keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>")
 
       -- Rename all occurrences of the hovered word for the entire file
-      keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
+      -- keymap("n", "gr", "<cmd>Lspsaga rename<CR>")
 
       -- Rename all occurrences of the hovered word for the selected files
       keymap("n", "gr", "<cmd>Lspsaga rename ++project<CR>")
@@ -231,7 +443,7 @@ return require('lazy').setup({
       keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>")
 
       -- Go to definition
-      -- keymap("n","gd", "<cmd>Lspsaga goto_definition<CR>")
+      keymap("n","gD", "<cmd>Lspsaga goto_definition<CR>")
 
       -- Peek type definition
       -- You can edit the file containing the type definition in the floating window
@@ -241,7 +453,7 @@ return require('lazy').setup({
       keymap("n", "gt", "<cmd>Lspsaga peek_type_definition<CR>")
 
       -- Go to type definition
-      -- keymap("n","gt", "<cmd>Lspsaga goto_type_definition<CR>")
+      keymap("n","gT", "<cmd>Lspsaga goto_type_definition<CR>")
 
 
       -- Show line diagnostics
@@ -308,66 +520,12 @@ return require('lazy').setup({
   },
   {
       'neovim/nvim-lspconfig',
-      config = function()
-          local lspconfig = require'lspconfig'
-          local util = require'lspconfig/util'
-
-          -- Gopls
-          lspconfig.gopls.setup {
-            cmd = {"gopls", "serve"},
-            filetypes = {"go", "gomod"},
-            root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-            settings = {
-              gopls = {
-                analyses = {
-                  unusedparams = true,
-                },
-                staticcheck = true,
-              },
-            },
-          }
-
-          -- Clang
-          lspconfig.clangd.setup{}
-
-          -- Typescript
-          lspconfig.tsserver.setup{}
-
-          -- Python
-          lspconfig.pyright.setup{}
-
-          local api = vim.api
-          api.nvim_create_autocmd('BufWritePre', {
-            pattern = '*.go',
-            callback = function()
-              vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-            end
-          })
-      end
   },
-  -- {
-  --     'nvim-orgmode/orgmode',
-  --     dependencies = { 'nvim-treesitter/nvim-treesitter' },
-  --     config = function()
-  --         require('orgmode').setup_ts_grammar()
-  --         require('nvim-treesitter.configs').setup {
-  --             -- If TS highlights are not enabled at all, or disabled via `disable` prop,
-  --             -- highlighting will fallback to default Vim syntax highlighting
-  --             highlight = {
-  --               enable = true,
-  --               -- Required for spellcheck, some LaTex highlights and
-  --               -- code block highlights that do not have ts grammar
-  --               additional_vim_regex_highlighting = {'org'},
-  --             },
-  --             ensure_installed = {'org'}, -- Or run :TSUpdate org
-  --         }
-  --         require('orgmode').setup{
-  --             org_agenda_files = { '~/org/**/*' },
-  --         }
-  --     end
-  -- }
+  {
+      'j-hui/fidget.nvim',
+      config = function()
+          require'fidget'.setup()
+      end,
+  },
 })
-
--- color scheme :)
--- vim.cmd.colorscheme "catppuccin"
 
