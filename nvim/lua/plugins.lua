@@ -30,6 +30,8 @@ return require('lazy').setup({
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
   'sainnhe/sonokai',
+  'nvim-neorg/neorg-telescope',
+  'https://git.sr.ht/~soywod/himalaya-vim',
   {
       'phaazon/hop.nvim',
       branch = 'v2',
@@ -40,18 +42,18 @@ return require('lazy').setup({
           local hop = require('hop')
           local directions = require('hop.hint').HintDirection
 
-          vim.keymap.set('', 'f', function()
-            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-          end, {remap=true})
-          vim.keymap.set('', 'F', function()
-            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-          end, {remap=true})
-          vim.keymap.set('', 't', function()
-            hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-          end, {remap=true})
-          vim.keymap.set('', 'T', function()
-            hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
-          end, {remap=true})
+          -- vim.keymap.set('', 'f', function()
+          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+          -- end, {remap=true})
+          -- vim.keymap.set('', 'F', function()
+          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+          -- end, {remap=true})
+          -- vim.keymap.set('', 't', function()
+          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+          -- end, {remap=true})
+          -- vim.keymap.set('', 'T', function()
+          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
+          -- end, {remap=true})
 
           vim.keymap.set('', 's', function()
               hop.hint_words()
@@ -90,7 +92,7 @@ return require('lazy').setup({
   {
       'DanilaMihailov/beacon.nvim',
       enabled = function()
-          return vim.g.neovide ~= nil
+          return vim.g.neovide == nil
       end,
   },
   {
@@ -284,6 +286,33 @@ return require('lazy').setup({
       'ms-jpq/coq.thirdparty',
       branch = '3p',
   },
+  --{
+  --    'nvim-neorg/neorg',
+  --    build = ":Neorg sync-parsers",
+  --    dependencies = { "nvim-lua/plenary.nvim" },
+  --    config = function()
+  --      require("neorg").setup {
+  --        load = {
+  --          ["core.defaults"] = {}, -- Loads default behaviour
+  --          ["core.concealer"] = {}, -- Adds pretty icons to your documents
+  --          ["core.dirman"] = { -- Manages Neorg workspaces
+  --            config = {
+  --              workspaces = {
+  --                notes = "~/org",
+  --              },
+  --            },
+  --          },
+
+  --          -- The below depend on Neovim v10.0. See https://github.com/nvim-neorg/neorg/issues/872#issuecomment-1553977574
+  --          -- for more information.
+  --          --
+  --          --["core.tempus"] = {},
+  --          --["core.ui"] = {},
+  --          --["core.ui.calendar"] = {},
+  --        },
+  --      }
+  --    end,
+  --},
   -- 'hrsh7th/cmp-nvim-lsp',
   -- 'hrsh7th/cmp-buffer',
   -- 'hrsh7th/cmp-path',
@@ -498,6 +527,9 @@ return require('lazy').setup({
 
      -- Floating terminal
       keymap({"n", "t"}, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
+
+      -- Finder (super handy!!!!)
+      keymap({"n", "i"}, "<leader>F", "<cmd>Lspsaga lsp_finder<cr>")
     end,
     dependencies = { {"nvim-tree/nvim-web-devicons"} }
   },
