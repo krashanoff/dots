@@ -7,7 +7,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 -- Need to have 24-bit color enabled
-vim.opt.termguicolors = true
+-- vim.opt.termguicolors = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -29,7 +29,6 @@ return require('lazy').setup({
   'mfussenegger/nvim-dap',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
-  'sainnhe/sonokai',
   {
       'phaazon/hop.nvim',
       branch = 'v2',
@@ -83,10 +82,7 @@ return require('lazy').setup({
         end,
         lazy = true,
   },
-  {
-        'sainnhe/sonokai',
-        lazy = true,
-  },
+  "rebelot/kanagawa.nvim",
   {
       'DanilaMihailov/beacon.nvim',
       enabled = function()

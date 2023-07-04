@@ -36,7 +36,7 @@ set background=dark
 if exists("g:neovide")
     colorscheme catppuccin
 else
-    colorscheme sonokai
+    colorscheme kanagawa
 endif
 
 " I dont always like pressing shift, but sometimes it's
@@ -239,6 +239,8 @@ nnoremap <silent><leader>dbii :lua require'dap'.repl.open()<cr>
 
 " neovide stuff :)
 if exists("g:neovide")
+    nnoremap <D-c> "+yy
+    inoremap <D-c> <ESC>"+yya
     nnoremap <D-v> "+p
     inoremap <D-v> <ESC>"+pa
     let g:neovide_floating_blur_amount_x = 2.0
