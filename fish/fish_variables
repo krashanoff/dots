@@ -27,7 +27,6 @@ SETUVAR _fish_abbr_glg:git\x20log\x20\x2d\x2dgraph
 SETUVAR _fish_abbr_gm:git\x20merge
 SETUVAR _fish_abbr_gp:git\x20pull
 SETUVAR _fish_abbr_gpu:git\x20push
-SETUVAR _fish_abbr_gpuu:git\x20push\x20\x2du
 SETUVAR _fish_abbr_gpuuo:git\x20push\x20\x2du\x20origin
 SETUVAR _fish_abbr_gr:git\x20reset
 SETUVAR _fish_abbr_grb:git\x20rebase

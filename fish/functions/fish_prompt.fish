@@ -73,7 +73,7 @@ function fish_prompt
         set arrow_color "$red"
     end
 
-    set -l arrow "$arrow_color➜ "
+    set -l arrow "$arrow_color-> "
     set -l is_root (id -u)
     if test $is_root = 0
         set arrow "$arrow_color# "
@@ -103,7 +103,7 @@ function fish_prompt
         set -l k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
         set -l k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
         set -l k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
-        echo -s $k8info
+        echo -s $k8info $repo_info
     end
 
     if test (uname) = "Darwin"
@@ -114,5 +114,10 @@ function fish_prompt
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$blue$hostname_parts[1]
 
-    echo -n -s $arrow $user_part $normal':'$green$cwd $repo_info $normal ' '
+    set -l prompt $arrow $user_part$normal':'$green$cwd
+    if set -q $k8info
+        set prompt "$prompt $repo_info"
+    end
+    set prompt $prompt$normal ' '
+    echo -n -s $prompt
 end
