@@ -185,8 +185,8 @@ nnoremap <silent><leader>Wq <C-w>=
 nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
 nnoremap <silent><leader>ts :tab split<cr>
-nnoremap <silent><C-;> :tabp<cr>
-nnoremap <silent><C-'> :tabn<cr>
+nnoremap <silent><A-;> :tabp<cr>
+nnoremap <silent><A-'> :tabn<cr>
 
 " Make the terminal better.
 tnoremap <esc> <c-\><c-n>

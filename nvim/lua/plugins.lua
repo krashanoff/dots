@@ -29,7 +29,30 @@ return require('lazy').setup({
   'mfussenegger/nvim-dap',
   'junegunn/goyo.vim',
   'junegunn/limelight.vim',
-  'sainnhe/sonokai',
+  {
+      'akinsho/toggleterm.nvim',
+      config = function()
+          local Terminal  = require('toggleterm.terminal').Terminal
+          local lazygit = Terminal:new({
+              cmd = "lazygit",
+              hidden = true,
+              direction = "float",
+          })
+
+          function _lazygit_toggle()
+            lazygit:toggle()
+          end
+
+          vim.api.nvim_set_keymap("n", "<leader>G", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+      end,
+  },
+  {
+      'sainnhe/sonokai',
+      config = function()
+        vim.g.sonokai_dim_inactive_windows = true
+        vim.g.sonokai_show_eob = true
+      end,
+  },
   'nvim-neorg/neorg-telescope',
   'https://git.sr.ht/~soywod/himalaya-vim',
   {
@@ -40,7 +63,7 @@ return require('lazy').setup({
       end,
       init = function()
           local hop = require('hop')
-          local directions = require('hop.hint').HintDirection
+          --local directions = require('hop.hint').HintDirection
 
           -- vim.keymap.set('', 'f', function()
           --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
@@ -118,7 +141,7 @@ return require('lazy').setup({
               integrations = {
                   gitsigns = true,
                   beacon = true,
-                  neogit = true,
+                  --neogit = true,
                   gitgutter = true,
                   which_key = true,
                   nvimtree = true,
@@ -164,21 +187,21 @@ return require('lazy').setup({
       -- Use newer devicons
       dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
-  {
-      'TimUntersberger/neogit',
-      dependencies = {
-          'sindrets/diffview.nvim',
-          'nvim-lua/plenary.nvim',
-      },
-      setup = function()
-          local neogit = require('neogit')
-          neogit.setup {
-              integrations = {
-                  diffview = true,
-              },
-          }
-      end,
-  },
+  --{
+  --    'TimUntersberger/neogit',
+  --    dependencies = {
+  --        'sindrets/diffview.nvim',
+  --        'nvim-lua/plenary.nvim',
+  --    },
+  --    setup = function()
+  --        local neogit = require('neogit')
+  --        neogit.setup {
+  --            integrations = {
+  --                diffview = true,
+  --            },
+  --        }
+  --    end,
+  --},
   {
       'lewis6991/gitsigns.nvim',
       config = function()
@@ -555,6 +578,7 @@ return require('lazy').setup({
   },
   {
       'j-hui/fidget.nvim',
+      branch = 'legacy',
       config = function()
           require'fidget'.setup()
       end,
