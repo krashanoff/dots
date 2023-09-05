@@ -7,7 +7,9 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 -- Need to have 24-bit color enabled
-vim.opt.termguicolors = true
+if os.getenv("TERM") ~= "xterm-256color" then
+    vim.opt.termguicolors = true
+end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -46,6 +48,12 @@ return require('lazy').setup({
           vim.api.nvim_set_keymap("n", "<leader>G", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
       end,
   },
+  -- Themes
+  {
+      'chriskempson/base16-vim'
+  },
+  'vim-scripts/fu',
+  'junegunn/seoul256.vim',
   {
       'sainnhe/sonokai',
       config = function()
@@ -63,20 +71,6 @@ return require('lazy').setup({
       end,
       init = function()
           local hop = require('hop')
-          --local directions = require('hop.hint').HintDirection
-
-          -- vim.keymap.set('', 'f', function()
-          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-          -- end, {remap=true})
-          -- vim.keymap.set('', 'F', function()
-          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-          -- end, {remap=true})
-          -- vim.keymap.set('', 't', function()
-          --   hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-          -- end, {remap=true})
-          -- vim.keymap.set('', 'T', function()
-          --   hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
-          -- end, {remap=true})
 
           vim.keymap.set('', 's', function()
               hop.hint_words()
@@ -187,21 +181,6 @@ return require('lazy').setup({
       -- Use newer devicons
       dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
-  --{
-  --    'TimUntersberger/neogit',
-  --    dependencies = {
-  --        'sindrets/diffview.nvim',
-  --        'nvim-lua/plenary.nvim',
-  --    },
-  --    setup = function()
-  --        local neogit = require('neogit')
-  --        neogit.setup {
-  --            integrations = {
-  --                diffview = true,
-  --            },
-  --        }
-  --    end,
-  --},
   {
       'lewis6991/gitsigns.nvim',
       config = function()
@@ -309,119 +288,6 @@ return require('lazy').setup({
       'ms-jpq/coq.thirdparty',
       branch = '3p',
   },
-  --{
-  --    'nvim-neorg/neorg',
-  --    build = ":Neorg sync-parsers",
-  --    dependencies = { "nvim-lua/plenary.nvim" },
-  --    config = function()
-  --      require("neorg").setup {
-  --        load = {
-  --          ["core.defaults"] = {}, -- Loads default behaviour
-  --          ["core.concealer"] = {}, -- Adds pretty icons to your documents
-  --          ["core.dirman"] = { -- Manages Neorg workspaces
-  --            config = {
-  --              workspaces = {
-  --                notes = "~/org",
-  --              },
-  --            },
-  --          },
-
-  --          -- The below depend on Neovim v10.0. See https://github.com/nvim-neorg/neorg/issues/872#issuecomment-1553977574
-  --          -- for more information.
-  --          --
-  --          --["core.tempus"] = {},
-  --          --["core.ui"] = {},
-  --          --["core.ui.calendar"] = {},
-  --        },
-  --      }
-  --    end,
-  --},
-  -- 'hrsh7th/cmp-nvim-lsp',
-  -- 'hrsh7th/cmp-buffer',
-  -- 'hrsh7th/cmp-path',
-  -- 'hrsh7th/cmp-cmdline',
-  -- {
-  --     'hrsh7th/nvim-cmp',
-  --     config = function ()
-  --         local cmp = require'cmp'
-  --         cmp.setup({
-  --             snippet = {
-  --                 expand = function(args)
-  --                     require('luasnip').lsp_expand(args.body)
-  --                 end,
-  --             },
-  --             mapping = cmp.mapping.preset.insert({
-  --                 ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-  --                 ['<C-f>'] = cmp.mapping.scroll_docs(4),
-  --                 ['<C-Space>'] = cmp.mapping.complete(),
-  --                 ['<C-e>'] = cmp.mapping.abort(),
-  --                 ['<CR>'] = cmp.mapping.confirm({ select = false }),
-  --             }),
-  --             sources = cmp.config.sources({
-  --                 { name = 'nvim_lsp' },
-  --                 { name = 'luasnip' },
-  --             }, {
-  --                 { name = 'buffer' },
-  --             })
-  --         })
-
-  --         local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  --         local lspconfig = require('lspconfig')
-  --         local util = require('lspconfig/util')
-
-  --          -- Gopls
-  --          lspconfig.gopls.setup({
-  --            capabilities = capabilities,
-  --            cmd = {"gopls", "serve"},
-  --            filetypes = {"go", "gomod"},
-  --            root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-  --            settings = {
-  --              gopls = {
-  --                analyses = {
-  --                  unusedparams = true,
-  --                },
-  --                staticcheck = true,
-  --              },
-  --            },
-  --          })
-
-  --          -- Clang
-  --          lspconfig.clangd.setup({
-  --            capabilities = capabilities,
-  --          })
-
-  --          -- Typescript
-  --          lspconfig.tsserver.setup({
-  --            capabilities = capabilities,
-  --          })
-
-  --          -- Python
-  --          lspconfig.pyright.setup({
-  --            capabilities = capabilities,
-  --          })
-
-  --          -- Lua
-  --          lspconfig.lua_ls.setup({
-  --              capabilities = capabilities,
-  --              settings = {
-  --                  Lua = {
-  --                      runtime = {
-  --                          version = 'LuaJIT',
-  --                      },
-  --                      diagnostics = {
-  --                          globals = {'vim'},
-  --                      },
-  --                      workspace = {
-  --                          library = vim.api.nvim_get_runtime_file("", true),
-  --                      },
-  --                      telemetry = {
-  --                          enable = false,
-  --                      },
-  --                  },
-  --              },
-  --          })
-  --     end,
-  -- },
   {
       'nvim-tree/nvim-tree.lua',
       tag = 'nightly',
