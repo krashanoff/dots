@@ -35,7 +35,7 @@ etc.
     :ensure t
     :config
     :init (load-theme 'darcula t)
-    (set-frame-font "FiraCode Nerd Font Mono-14"))
+    (set-frame-font "CommitMono"))
 #+end_src
 
 * Keybinds
@@ -120,7 +120,8 @@ Need a nice way to open terminal and navigate splits.
 
 ** Web Browser
 
-Sometimes EWW can be handy!
+Sometimes EWW can be handy! It's great if you want to just pop open a tab and quickly reference StackOverflow
+or w/e.
 
 #+begin_src emacs-lisp
   (defun open-homepage
