@@ -24,6 +24,58 @@ end
 function aa
 	abbr --add $argv
 end
+
+# git stuff
+aa lg lazygit
+aa g git status
+aa lsal ls -al
+aa ga git add
+aa gaa git add --all
+aa gb git branch
+aa gbm git branch -m
+aa gc git commit
+aa gca git commit -a
+aa gcam git commit -am
+aa gcamne git commit --amend --no-edit
+aa gcamnea git commit --amend --no-edit -a
+aa gcm git commit -m
+aa gco git checkout
+aa gcob git checkout -b
+aa gcog git checkout --guess
+aa gcom git checkout master
+aa gcong git checkout --no-guess
+aa gcp git cherry-pick
+aa gd git diff
+aa gdno git diff --name-only
+aa gf git fetch
+aa gl git log
+aa glg git log --graph
+aa gm git merge
+aa gp git pull
+aa gpu git push
+aa gpuuo git push -u origin
+aa gr git reset
+aa grb git rebase
+aa grbab git rebase --abort
+aa grbc git rebase --continue
+aa grbcne git rebase --continue --no-edit
+aa grbi git rebase -i
+aa gre git remote
+aa gres git remote show
+aa grf git reflog
+aa grs git reset --soft
+aa gs git status
+aa gsm git submodule
+aa gsmi git submodule init
+aa gsmu git submodule update
+aa gsmui git submodule update --init
+aa gsmuir git submodule update --init --recursive
+aa gss git status --short
+aa gst git stash
+aa gstp git stash pop
+aa gw git whatchanged
+
+# shortcuts that aren't added by kubectl_aliases
 aa kx kubectx
 aa kcx kubectx
 aa kns kubens
@@ -57,4 +109,5 @@ set -gx PNPM_HOME "/Users/leo/Library/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
-# pnpm end
+#pnpm end
+
