@@ -94,14 +94,14 @@ return require('lazy').setup({
     end,
   },
   { 'willothy/flatten.nvim', config = true },
-  {
-        'Equilibris/nx.nvim',
-        dependencies = { 'nvim-telescope/telescope.nvim' },
-        config = function()
-            require('nx').setup({})
-        end,
-        lazy = true,
-  },
+  --{
+  --      'Equilibris/nx.nvim',
+  --      dependencies = { 'nvim-telescope/telescope.nvim' },
+  --      config = function()
+  --          require('nx').setup({})
+  --      end,
+  --      lazy = true,
+  --},
   "rebelot/kanagawa.nvim",
   {
       'DanilaMihailov/beacon.nvim',
