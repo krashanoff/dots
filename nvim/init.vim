@@ -132,9 +132,11 @@ nnoremap go gg
 " moving lines
 nnoremap <silent><A-j> :m+<cr>==
 nnoremap <silent><A-k> :m-2<cr>==
-" osx key moment
-" nnoremap <silent>∆ :m+<cr>== 
-" nnoremap <silent>˚ :m-2<cr>==
+" osx key moment when in non-standard terminal
+if exists("g:neovide")
+  nnoremap <silent>∆ :m+<cr>== 
+  nnoremap <silent>˚ :m-2<cr>==
+endif
 vnoremap <silent><A-j> :m '>+1<cr>gv=gv
 vnoremap <silent><A-k> :m '<-2<cr>gv=gv
 
@@ -183,8 +185,8 @@ nnoremap <silent><leader>Wq <C-w>=
 nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
 nnoremap <silent><leader>ts :tab split<cr>
-nnoremap <silent><C-;> :tabp<cr>
-nnoremap <silent><C-'> :tabn<cr>
+nnoremap <silent><A-;> :tabp<cr>
+nnoremap <silent><A-'> :tabn<cr>
 
 " Make the terminal better.
 tnoremap <esc> <c-\><c-n>
@@ -222,13 +224,15 @@ nnoremap <leader>fm <cmd>Telescope marks<cr><esc>
 nnoremap <leader>fM <cmd>Telescope man_pages<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fu <cmd>Telescope undo<cr>
+nnoremap <leader>fnn <cmd>Telescope notify<cr>
+nnoremap <leader>fnl <cmd>Telescope neorg find_linkable<cr>
+nnoremap <leader>fnh <cmd>Telescope neorg search_headings<cr>
 
-nnoremap <silent><leader>B :Beacon<cr>
+inoremap <leader>de <ESC>dea
 
-" sneak maps my leader
-let g:sneak#s_next = 1
-map \ :Sneak_
-map , :Sneak
+if exists("g:beacon")
+  nnoremap <silent><leader>B :Beacon<cr>
+endif
 
 " debug
 nnoremap <silent><leader>dbb :lua require'dap'.toggle_breakpoint()<cr>
