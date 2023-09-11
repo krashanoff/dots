@@ -1,5 +1,4 @@
-"
-" krashanoff
+" " krashanoff
 "
 
 " Important pages:
@@ -193,11 +192,6 @@ tnoremap <esc> <c-\><c-n>
 tnoremap <leader><leader> <c-\><c-n>
 
 autocmd TermOpen * setlocal statusline=%{b:term_title}
-
-" For some reason, COQ really doesn't like when you try to set the
-" keymap from Lua.
-autocmd VimEnter * :COQnow -s
-let g:coq_settings = { 'keymap.jump_to_mark': v:null }
 
 nnoremap <silent><leader>gg :Neogit<cr>
 

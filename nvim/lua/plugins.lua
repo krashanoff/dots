@@ -1,5 +1,9 @@
 -- lua moment
 
+-- Remove netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local keymap = vim.keymap.set
 
 local runtime_path = vim.split(package.path, ";")
@@ -214,21 +218,60 @@ return require('lazy').setup({
     end,
   },
   {
-      'ms-jpq/coq_nvim',
-      dependencies = { 'neovim/nvim-lspconfig' },
-      branch = 'coq',
-      setup = function()
-      end,
+      'hrsh7th/nvim-cmp',
+      dependencies = {
+          'neovim/nvim-lspconfig',
+          'hrsh7th/cmp-path',
+          'hrsh7th/cmp-cmdline',
+          'hrsh7th/cmp-buffer',
+          'hrsh7th/cmp-nvim-lsp',
+
+          -- Snippets bleh
+          'L3MON4D3/LuaSnip',
+          'saadparwaiz1/cmp_luasnip'
+      },
       config = function()
-          local lspconfig = require'lspconfig'
-          local coq = require'coq'
-          local util = require'lspconfig/util'
+          local cmp = require('cmp')
+          cmp.setup({
+              snippet = {
+                  expand = function(args)
+                      require('luasnip').lsp_expand(args.body)
+                  end,
+              },
+              window = {
+                  --completion = cmp.config.window.bordered(),
+                  --documentation = cmp.config.window.bordered(),
+              },
+              mapping = cmp.mapping.preset.insert({
+                  ["<C-i>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                  ["<C-u>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                  ["<Tab>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                  ["<S-Tab>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                  ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                  ['<C-Space>'] = cmp.mapping.complete(),
+                  ['<C-e>'] = cmp.mapping.abort(),
+                  ['<CR>'] = cmp.mapping.confirm(),
+              }),
+              sources = cmp.config.sources({
+                  { name = 'nvim_lsp' },
+                  { name = 'luasnip' },
+              }, {
+                  { name = 'buffer' },
+              })
+          })
+
+          local lspconfig = require('lspconfig')
+          local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+          -- We do Rust through rust-tools.
 
           -- Gopls
-          lspconfig.gopls.setup(coq.lsp_ensure_capabilities {
+          lspconfig.gopls.setup {
+            capabilities = capabilities,
             cmd = {"gopls", "serve"},
             filetypes = {"go", "gomod"},
-            root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+            root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
             settings = {
               gopls = {
                 analyses = {
@@ -237,19 +280,20 @@ return require('lazy').setup({
                 staticcheck = true,
               },
             },
-          })
+          }
 
           -- Clang
-          lspconfig.clangd.setup(coq.lsp_ensure_capabilities{})
+          lspconfig.clangd.setup({ capabilities = capabilities })
 
           -- Typescript
-          lspconfig.tsserver.setup(coq.lsp_ensure_capabilities{})
+          lspconfig.tsserver.setup({ capabilities = capabilities })
 
           -- Python
-          lspconfig.pyright.setup(coq.lsp_ensure_capabilities{})
+          lspconfig.pyright.setup({ capabilities = capabilities })
 
           -- Lua
-          lspconfig.lua_ls.setup(coq.lsp_ensure_capabilities{
+          lspconfig.lua_ls.setup({
+              capabilities = capabilities,
               settings = {
                   Lua = {
                       runtime = {
@@ -267,16 +311,18 @@ return require('lazy').setup({
                   },
               },
           })
-
-          local api = vim.api
-          api.nvim_create_autocmd('BufWritePre', {
-            pattern = '*.go',
-            callback = function()
-              vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-            end
-          })
       end,
-  },
+      },
+
+  --        local api = vim.api
+  --        api.nvim_create_autocmd('BufWritePre', {
+  --          pattern = '*.go',
+  --          callback = function()
+  --            vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+  --          end
+  --        })
+  --    end,
+  --},
   {
       'ms-jpq/coq.artifacts',
       branch = 'artifacts',
