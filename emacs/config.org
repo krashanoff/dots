@@ -5,13 +5,16 @@
 
 * Entrypoint for my Emacs config
 
-#+begin_src emacs-lisp  
+#+begin_src emacs-lisp
   (setq user-mail-address "leo@krashanoff.com")
+#+end_src
 
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (package-initialize)
-  (package-refresh-contents)
+** Packages
+
+#+begin_src emacs-lisp
+  (use-package magit)
+  (use-package general)
+  (use-package evil)
 #+end_src
 
 * Creature Comforts
@@ -40,7 +43,7 @@ etc.
 
 * Keybinds
 
-Evil is pretty essential to keeping me happy in this god-forsaken editor.
+Evil is pretty essential to keeping me happy in this god-forsaken "editor".
 So is general. These guys are great. While I'm here, I set up some little
 tricks to make general:
 a) Play nice with Evil
@@ -78,21 +81,55 @@ macro in ~INSERT~ mode, but alas, not yet.
   (defun insert-leader () (interactive) (insert leader))
 
   (general-create-definer normal-leader-def
-    :prefix leader
+    :prefix "\\"
     :prefix-command 'normal-leader-map)
-  (general-create-definer insert-leader-def
-    :prefix "C-x 6"
-    :prefix-command 'insert-leader-map)
+  ;;(general-create-definer insert-leader-def
+   ;; :prefix "C-x 6"
+    ;;:prefix-command 'insert-leader-map)
+
+  (defun insert-semi ()
+    (interactive)
+    (insert leader))
+  ;;(general-def
+   ;; :state 'insert
+    ;;leader
+    ;;(general-key-dispatch
+    ;;  'insert-semi
+    ;;  :timeout 0.25
+    ;;  :inherit-keymap insert-leader-map))
+
+  (normal-leader-def "S-x" 'execute-extended-command)
+  (normal-leader-def "g" 'magit-status)
+#+end_src
+
+** A quick note on dispatch mapping
+
+So in the `general.el` docs, they suggest that for simulating Vim-style
+mappings where you can just `inoremap <leader>j <ESC>j`, you can use this
+feature for "dispatch mapping". I've tried using this to reasonable success,
+but there's caveats.
+
+The default mapping they suggest doesn't use anything complicated in `general`,
+like global keymaps, and when I tried using it (see my commented-out stuff above)
+I haven't had much luck.
+
+So for now, I hardcode everything, but I _really_ don't want to do this going
+forward. I think the ultimate solution here will be to create a thunk so that
+these leader mappings are computed at the bottom of this file. /shrug
+
+#+begin_src emacs-lisp
   (general-def
     :state 'insert
     leader
     (general-key-dispatch
-      'self-insert-command
+      'insert-semi
       :timeout 0.1
-      :inherit-keymap insert-leader-map))
-
-  (normal-leader-def "S-x" 'execute-extended-command)
-  (normal-leader-def "g" 'magit-status)
+      ";" 'evil-escape
+      "w" 'save-buffer
+      "C-h" 'save-buffer
+      "C-j" 'save-buffer
+      "C-k" 'save-buffer
+    ))
 #+end_src
 
 ** Terminal and splits
@@ -105,10 +142,10 @@ Need a nice way to open terminal and navigate splits.
   (normal-leader-def "C-j" 'evil-window-down)
   (normal-leader-def "C-k" 'evil-window-up)
   (normal-leader-def "C-l" 'evil-window-right)
-  (insert-leader-def "C-h" 'evil-window-left)
-  (insert-leader-def "C-j" 'evil-window-down)
-  (insert-leader-def "C-k" 'evil-window-up)
-  (insert-leader-def "C-l" 'evil-window-right)
+  ;;(insert-leader-def "C-h" 'evil-window-left)
+  ;;(insert-leader-def "C-j" 'evil-window-down)
+  ;;(insert-leader-def "C-k" 'evil-window-up)
+  ;;(insert-leader-def "C-l" 'evil-window-right)
 #+end_src
 
 ** Moving lines
