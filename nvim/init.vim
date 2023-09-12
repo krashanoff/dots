@@ -46,10 +46,6 @@ inoremap <S-BS> <C-w>
 " enter is good
 inoremap <silent><S-CR> <ESC>O
 
-" goyo config
-nnoremap <silent><leader>Z :Goyo<cr>
-nnoremap <silent><leader>L :Limelight!!<cr>
-
 " undo shortcuts
 inoremap <silent><C-z> <ESC>ua
 nnoremap <silent><C-z> u
