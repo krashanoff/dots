@@ -5,43 +5,35 @@
 
 * Entrypoint for my Emacs config
 
-#+begin_src emacs-lisp
-  (setq user-mail-address "leo@krashanoff.com")
-#+end_src
-
 ** Packages
 
 #+begin_src emacs-lisp
   (use-package magit)
   (use-package general)
   (use-package evil)
-#+end_src
-
-* Creature Comforts
-
-Here I set up just the absolute essentials in terms of themeing, packages,
-etc.
-
-#+begin_src emacs-lisp
-  (setq inhibit-splash-screen t)
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (customize-set-variable 'scroll-bar-mode nil)
-  (customize-set-variable 'horizontal-scroll-bar-mode nil)
-
-  (transient-mark-mode 1)
-
-  (windmove-default-keybindings)
-
-  (require 'use-package)
-  (use-package darcula-theme
-    :ensure t
-    :config
-    :init (load-theme 'darcula t)
-    (set-frame-font "CommitMono"))
+  (use-package transpose-frame)
+  
+(require 'use-package)
+(use-package darcula-theme
+  :ensure t
+  :config
+  :init (load-theme 'darcula t)
+  (set-frame-font "CommitMono"))
 #+end_src
 
 * Keybinds
+
+** God mode
+
+There's a plugin - God mode - that makes it so that you don't have to
+kill your wrists every time you want to use a keybind that you haven't
+configured yourself.
+
+#+begin_src emacs-lisp
+  (require 'god-mode)
+#+end_src
+
+** Evil
 
 Evil is pretty essential to keeping me happy in this god-forsaken "editor".
 So is general. These guys are great. While I'm here, I set up some little
