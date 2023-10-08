@@ -4,6 +4,7 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+local api = vim.api
 local keymap = vim.keymap.set
 
 local runtime_path = vim.split(package.path, ";")
@@ -11,7 +12,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 -- Need to have 24-bit color enabled
-if os.getenv("TERM") ~= "xterm-256color" then
+if os.getenv("TERM") == "xterm-256color" then
     vim.opt.termguicolors = true
 end
 
@@ -33,12 +34,30 @@ return require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
   'mfussenegger/nvim-dap',
+  'theHamsta/nvim-dap-virtual-text',
+  'sainnhe/everforest',
+  'EdenEast/nightfox.nvim',
+  {
+      'rcarriga/nvim-dap-ui',
+      dependencies = {
+          'mfussenegger/nvim-dap',
+      },
+  },
   'sainnhe/sonokai',
   {
-      'folke/zen-mode.nvim',
+      'pocco81/true-zen.nvim',
+      opts = {
+        integrations = {
+            twilight = true,
+        },
+      },
       config = function()
-        vim.api.nvim_set_keymap("n", "<leader>Z", "<cmd>ZenMode<CR>", { noremap = true, silent = true })
-      end
+          api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
+          api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
+          api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
+      end,
   },
   {
     'folke/twilight.nvim',
