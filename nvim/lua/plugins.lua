@@ -4,6 +4,7 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+local api = vim.api
 local keymap = vim.keymap.set
 
 local runtime_path = vim.split(package.path, ";")
@@ -11,7 +12,7 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 -- Need to have 24-bit color enabled
-if os.getenv("TERM") ~= "xterm-256color" then
+if os.getenv("TERM") == "xterm-256color" then
     vim.opt.termguicolors = true
 end
 
@@ -33,9 +34,37 @@ return require('lazy').setup({
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
   'mfussenegger/nvim-dap',
-  'junegunn/goyo.vim',
-  'junegunn/limelight.vim',
+  'theHamsta/nvim-dap-virtual-text',
+  'sainnhe/everforest',
+  'EdenEast/nightfox.nvim',
+  {
+      'rcarriga/nvim-dap-ui',
+      dependencies = {
+          'mfussenegger/nvim-dap',
+      },
+  },
   'sainnhe/sonokai',
+  {
+      'pocco81/true-zen.nvim',
+      opts = {
+        integrations = {
+            twilight = true,
+        },
+      },
+      config = function()
+          api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
+          api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
+          api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
+      end,
+  },
+  {
+    'folke/twilight.nvim',
+    config = function()
+        vim.api.nvim_set_keymap("n", "<leader>X", "<cmd>Twilight<CR>", {noremap = true, silent = true})
+    end,
+  },
   {
       'akinsho/toggleterm.nvim',
       config = function()
@@ -98,14 +127,6 @@ return require('lazy').setup({
     end,
   },
   { 'willothy/flatten.nvim', config = true },
-  --{
-  --      'Equilibris/nx.nvim',
-  --      dependencies = { 'nvim-telescope/telescope.nvim' },
-  --      config = function()
-  --          require('nx').setup({})
-  --      end,
-  --      lazy = true,
-  --},
   "rebelot/kanagawa.nvim",
   {
       'DanilaMihailov/beacon.nvim',
@@ -149,7 +170,15 @@ return require('lazy').setup({
   },
   {
       'nvim-treesitter/nvim-treesitter',
-      build = ':TSUpdate'
+      build = ':TSUpdate',
+      config = function()
+          require'nvim-treesitter.configs'.setup {
+              highlight = {
+                  enable = true,
+                  additional_vim_regex_highlighting = false,
+              },
+          }
+      end,
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -218,6 +247,14 @@ return require('lazy').setup({
     end,
   },
   {
+      'ray-x/lsp_signature.nvim',
+      event = "VeryLazy",
+      opts = {},
+      config = function(_, opts)
+          require'lsp_signature'.setup(opts)
+      end,
+  },
+  {
       'hrsh7th/nvim-cmp',
       dependencies = {
           'neovim/nvim-lspconfig',
@@ -249,6 +286,7 @@ return require('lazy').setup({
                   ["<S-Tab>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                   ['<C-b>'] = cmp.mapping.scroll_docs(-4),
                   ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                  ['<C-\\>'] = cmp.mapping.complete(),
                   ['<C-Space>'] = cmp.mapping.complete(),
                   ['<C-e>'] = cmp.mapping.abort(),
                   ['<CR>'] = cmp.mapping.confirm(),
@@ -385,7 +423,7 @@ return require('lazy').setup({
       -- If there is no definition, it will instead be hidden
       -- When you use an action in finder like "open vsplit",
       -- you can use <C-t> to jump back
-      keymap("n", "gh", "<cmd>Lspsaga lsp_finder<CR>")
+      keymap("n", "gh", "<cmd>Lspsaga finder<CR>")
 
       -- Code action
       keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>")
@@ -461,7 +499,7 @@ return require('lazy').setup({
       keymap({"n", "t"}, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
 
       -- Finder (super handy!!!!)
-      keymap({"n", "i"}, "<leader>F", "<cmd>Lspsaga lsp_finder<cr>")
+      keymap({"n", "i"}, "<leader>F", "<cmd>Lspsaga finder<cr>")
     end,
     dependencies = { {"nvim-tree/nvim-web-devicons"} }
   },
@@ -481,6 +519,20 @@ return require('lazy').setup({
             },
           })
       end,
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = {  -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = {"CmdlineEnter"},
+    ft = {"go", 'gomod'},
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
   {
       'neovim/nvim-lspconfig',

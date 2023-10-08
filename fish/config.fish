@@ -9,7 +9,22 @@ if test (uname) = "Darwin"
 end
 
 # Rust
-set -Ux fish_user_paths $HOME/.cargo/bin
+fish_add_path -Up $HOME/.cargo/bin
+
+# asdf, mostly just used for node
+source $HOME/.asdf/asdf.fish
+mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
+
+# pnpm
+set -Ux PNPM_HOME "/Users/leo/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  fish_add_path -Up "$PNPM_HOME"
+end
+# pnpm end
+
+# Go
+fish_add_path -Up /opt/homebrew/opt/go@1.20/bin
+fish_add_path -Up /Users/leo/go/bin
 
 # Vars
 set -Ux EDITOR nvim
@@ -25,10 +40,11 @@ function aa
 	abbr --add $argv
 end
 
+aa lsal ls -al
+
 # git stuff
 aa lg lazygit
 aa g git status
-aa lsal ls -al
 aa ga git add
 aa gaa git add --all
 aa gb git branch
@@ -74,6 +90,10 @@ aa gss git status --short
 aa gst git stash
 aa gstp git stash pop
 aa gw git whatchanged
+aa gpunv git push --no-verify
+aa gpnv git push --no-verify
+aa gpufnv git push --force --no-verify
+aa gra git remote add
 
 # shortcuts that aren't added by kubectl_aliases
 aa kx kubectx
@@ -90,6 +110,8 @@ aa hse helm search
 aa hh helm history
 
 aa guivm neovide --multigrid
+aa nvd neovide --multigrid
+aa gpfo git push --force origin
 
 # Need to add handlers to the config file instead of autoload
 function kube_change --on-event kubectx_postexec
@@ -97,15 +119,5 @@ function kube_change --on-event kubectx_postexec
 	echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
 end
 
-source $HOME/.asdf/asdf.fish
-mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
-
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
-
-# pnpm
-set -gx PNPM_HOME "/Users/leo/Library/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-  set -gx PATH "$PNPM_HOME" $PATH
-end
-# pnpm end
 

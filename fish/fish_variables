@@ -1,6 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR --export EDITOR:nvim
+SETUVAR --export PNPM_HOME:/Users/leo/Library/pnpm
 SETUVAR --export XDG_CONFIG_HOME:/Users/leo/\x2econfig
 SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_ga:git\x20add
@@ -1340,4 +1341,4 @@ SETUVAR fish_pager_color_selected_background:\x2d\x2dbackground\x3dbrblack
 SETUVAR fish_pager_color_selected_completion:\x1d
 SETUVAR fish_pager_color_selected_description:\x1d
 SETUVAR fish_pager_color_selected_prefix:\x1d
-SETUVAR --export fish_user_paths:/Users/leo/\x2ecargo/bin
+SETUVAR --export fish_user_paths:/Users/leo/Library/pnpm\x1e/Users/leo/\x2easdf/shims\x1e/Users/leo/\x2easdf/bin\x1e/opt/homebrew/opt/go\x401\x2e20/bin\x1e/Users/leo/go/bin\x1e/Users/leo/\x2ecargo/bin
