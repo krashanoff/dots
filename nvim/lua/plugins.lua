@@ -7,6 +7,9 @@ vim.g.loaded_netrwPlugin = 1
 local api = vim.api
 local keymap = vim.keymap.set
 
+-- It's nice to be able to leader-cmd when we use colon.
+api.nvim_set_keymap('n', '<leader>x', ':x<CR>', {})
+
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
@@ -30,20 +33,36 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 return require('lazy').setup({
+  -- QOL
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
-  'mfussenegger/nvim-dap',
-  'theHamsta/nvim-dap-virtual-text',
   'sainnhe/everforest',
   'EdenEast/nightfox.nvim',
+  'sainnhe/sonokai',
+
+  -- DAP
+  'mfussenegger/nvim-dap',
+  'theHamsta/nvim-dap-virtual-text',
   {
       'rcarriga/nvim-dap-ui',
       dependencies = {
           'mfussenegger/nvim-dap',
+          'leoluz/nvim-dap-go',
       },
+      config = function()
+          local dap = require('dap')
+
+          dap.adapters.go = function(callback, config)
+            -- Wait for delve to start
+            vim.defer_fn(function()
+                callback({type = "server", host = "127.0.0.1", port = "port"})
+              end,
+            100)
+          end
+      end,
   },
-  'sainnhe/sonokai',
+
   {
       'pocco81/true-zen.nvim',
       opts = {
@@ -143,7 +162,6 @@ return require('lazy').setup({
   {
       'catppuccin/nvim',
       name = "catppuccin",
-      cond = function() return vim.g.neovide ~= nil end,
       config = function()
           require('catppuccin').setup({
               flavour = 'mocha',
@@ -321,7 +339,7 @@ return require('lazy').setup({
           }
 
           -- Clang
-          lspconfig.clangd.setup({ capabilities = capabilities })
+          --lspconfig.clangd.setup({ capabilities = capabilities })
 
           -- Typescript
           lspconfig.tsserver.setup({ capabilities = capabilities })

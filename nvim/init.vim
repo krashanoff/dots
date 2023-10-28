@@ -8,8 +8,9 @@
 let mapleader = ";"
 inoremap <silent><leader><return> ;<return>
 
-" Disable mouse
-set mouse=
+" Partial support for mouse
+set mouse=nv
+set mousemodel=extend
 
 " Cancel operations with tab.
 onoremap <silent><Tab> <ESC>
@@ -32,11 +33,7 @@ let g:github_colors_block_diffmark = 0
 
 set background=dark
 
-if exists("g:neovide")
-    colorscheme catppuccin
-else
-    colorscheme kanagawa
-endif
+colorscheme catppuccin
 
 " I dont always like pressing shift, but sometimes it's
 " a necessary evil
@@ -154,18 +151,18 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " window manipulation
-inoremap <C-S-H> <C-w>H
-inoremap <C-S-J> <C-w>J
-inoremap <C-S-K> <C-w>K
-inoremap <C-S-L> <C-w>L
-tnoremap <C-S-H> <C-\><C-n><C-w>H
-tnoremap <C-S-J> <C-\><C-n><C-w>J
-tnoremap <C-S-K> <C-\><C-n><C-w>K
-tnoremap <C-S-L> <C-\><C-n><C-w>L
-nnoremap <C-S-H> <C-w>H
-nnoremap <C-S-J> <C-w>J
-nnoremap <C-S-K> <C-w>K
-nnoremap <C-S-L> <C-w>L
+inoremap <M-S-H> <C-w>H
+inoremap <M-S-J> <C-w>J
+inoremap <M-S-K> <C-w>K
+inoremap <M-S-L> <C-w>L
+tnoremap <M-S-H> <C-\><C-n><C-w>H
+tnoremap <M-S-J> <C-\><C-n><C-w>J
+tnoremap <M-S-K> <C-\><C-n><C-w>K
+tnoremap <M-S-L> <C-\><C-n><C-w>L
+nnoremap <M-S-H> <C-w>H
+nnoremap <M-S-J> <C-w>J
+nnoremap <M-S-K> <C-w>K
+nnoremap <M-S-L> <C-w>L
 
 " More natural splits
 nnoremap <silent><leader>v <esc>:vsplit<cr>
@@ -180,8 +177,8 @@ nnoremap <silent><leader>Wq <C-w>=
 nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
 nnoremap <silent><leader>ts :tab split<cr>
-nnoremap <silent><A-;> :tabp<cr>
-nnoremap <silent><A-'> :tabn<cr>
+nnoremap <silent><M-;> :tabp<cr>
+nnoremap <silent><M-'> :tabn<cr>
 
 " Make the terminal better.
 tnoremap <esc> <c-\><c-n>
