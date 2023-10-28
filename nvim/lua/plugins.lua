@@ -41,6 +41,15 @@ return require('lazy').setup({
   'EdenEast/nightfox.nvim',
   'sainnhe/sonokai',
 
+  -- Fun little extra tidbit for some reason idk lol
+  {
+      'wfxr/minimap.vim',
+      config = function()
+          api.nvim_set_keymap("n", "<leader>M", ":MinimapToggle<CR>", {})
+          api.nvim_set_keymap("i", "<leader>M", "<ESC>:MinimapToggle<CR>", {})
+      end,
+  },
+
   -- DAP
   'mfussenegger/nvim-dap',
   'theHamsta/nvim-dap-virtual-text',
@@ -276,6 +285,7 @@ return require('lazy').setup({
       'hrsh7th/nvim-cmp',
       dependencies = {
           'neovim/nvim-lspconfig',
+          'lukas-reineke/lsp-format.nvim',
           'hrsh7th/cmp-path',
           'hrsh7th/cmp-cmdline',
           'hrsh7th/cmp-buffer',
@@ -319,8 +329,9 @@ return require('lazy').setup({
 
           local lspconfig = require('lspconfig')
           local capabilities = require('cmp_nvim_lsp').default_capabilities()
+          local lspformat = require('lsp-format') -- Required for format-on-save
 
-          -- We do Rust through rust-tools.
+          -- TODO: We do Rust through rust-tools.
 
           -- Gopls
           lspconfig.gopls.setup {
@@ -369,16 +380,6 @@ return require('lazy').setup({
           })
       end,
       },
-
-  --        local api = vim.api
-  --        api.nvim_create_autocmd('BufWritePre', {
-  --          pattern = '*.go',
-  --          callback = function()
-  --            vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-  --          end
-  --        })
-  --    end,
-  --},
   {
       'ms-jpq/coq.artifacts',
       branch = 'artifacts',
