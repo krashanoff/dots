@@ -35,15 +35,32 @@ return require('lazy').setup({
   'tpope/vim-sleuth',
   'mfussenegger/nvim-dap',
   'theHamsta/nvim-dap-virtual-text',
-  'sainnhe/everforest',
-  'EdenEast/nightfox.nvim',
+  {
+      'williamboman/mason.nvim',
+      config = function (self, opts)
+        require("mason").setup()
+      end,
+  },
+  {
+      'williamboman/mason-lspconfig.nvim',
+      dependencies = {
+          'williamboman/mason.nvim',
+          'neovim/nvim-lspconfig',
+      },
+      config = function()
+        require("mason-lspconfig").setup()
+
+        require("mason-lspconfig").setup {
+            ensure_installed = { "lua_ls", "rust_analyzer", "gopls", "golangci_lint_ls" },
+        }
+      end,
+  },
   {
       'rcarriga/nvim-dap-ui',
       dependencies = {
           'mfussenegger/nvim-dap',
       },
   },
-  'sainnhe/sonokai',
   {
       'pocco81/true-zen.nvim',
       opts = {
@@ -83,11 +100,10 @@ return require('lazy').setup({
       end,
   },
   -- Themes
-  {
-      'chriskempson/base16-vim'
-  },
-  'vim-scripts/fu',
-  'junegunn/seoul256.vim',
+  'sainnhe/sonokai',
+  'sainnhe/everforest',
+  'EdenEast/nightfox.nvim',
+  'chriskempson/base16-vim',
   {
       'sainnhe/sonokai',
       config = function()
@@ -95,7 +111,6 @@ return require('lazy').setup({
         vim.g.sonokai_show_eob = true
       end,
   },
-  'nvim-neorg/neorg-telescope',
   {
       'phaazon/hop.nvim',
       branch = 'v2',
@@ -182,7 +197,7 @@ return require('lazy').setup({
   },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.1',
+    tag = '0.1.4',
     dependencies = {
         'nvim-lua/plenary.nvim',
         'debugloop/telescope-undo.nvim',
@@ -537,12 +552,12 @@ return require('lazy').setup({
   {
       'neovim/nvim-lspconfig',
   },
-  {
-      'j-hui/fidget.nvim',
-      branch = 'legacy',
-      config = function()
-          require'fidget'.setup()
-      end,
-  },
+  --{
+  --    'j-hui/fidget.nvim',
+  --    branch = 'legacy',
+  --    config = function()
+  --        require'fidget'.setup()
+  --    end,
+  --},
 })
 
