@@ -79,7 +79,7 @@ function fish_prompt
         set arrow "$arrow_color# "
     end
 
-    set -l cwd $cyan(basename (prompt_pwd))
+    set -l cwd $cyan(string shorten -m 45 (prompt_pwd -d 1))
 
     set -l repo_info
     if set -l repo_type (_repo_type)
@@ -107,7 +107,7 @@ function fish_prompt
     end
 
     if test (uname) = "Darwin"
-	set hostname_parts (string split . (hostname))
+        set hostname_parts (string split . (hostname))
     else
         set hostname_parts (string split . (hostname))
     end

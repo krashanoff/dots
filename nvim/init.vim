@@ -1,4 +1,4 @@
-" " krashanoff
+" krashanoff
 "
 
 " Important pages:
