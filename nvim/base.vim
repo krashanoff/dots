@@ -13,6 +13,7 @@ if !exists('g:syntax-on')
     syntax on
 end
 set ruler               " Show the line and column numbers of the cursor.
+set cursorline
 set formatoptions+=o    " Continue comment marker in new lines.
 set textwidth=0         " Hard-wrap long lines as you type them.
 set modeline            " Enable modeline.

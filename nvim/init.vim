@@ -1,4 +1,4 @@
-" " krashanoff
+" krashanoff
 "
 
 " Important pages:
@@ -194,6 +194,7 @@ nnoremap <silent><leader>th :split<cr>:ter<cr>
 
 " fuzzy find remaps
 nnoremap <leader>ff <cmd>Telescope fd<cr>
+nnoremap <leader>fF <cmd>Telescope find_files find_command=fd,--hidden,--unrestricted<cr>
 nnoremap <leader>frg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fgc <cmd>Telescope git_bcommits<cr>
 nnoremap <leader>fgb <cmd>Telescope git_branches<cr>

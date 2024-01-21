@@ -49,7 +49,6 @@ aa ga git add
 aa gaa git add --all
 aa gb git branch
 aa gbm git branch -m
-aa gc git commit
 aa gca git commit -a
 aa gcam git commit -am
 aa gcamne git commit --amend --no-edit
@@ -119,5 +118,27 @@ function kube_change --on-event kubectx_postexec
 	echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
 end
 
+#set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
+
+# kubectl stuff that isn't normally there.
+aa kgjo kubectl get jobs
+aa kgjob kubectl get jobs
+aa kgjobs kubectl get jobs
+aa kgpooname kubectl get pods -o=name
+aa gcauadsqp gcloud auth application-default set-quota-project
+aa gc gcloud
+
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 
+aa gmc git merge --continue
+aa gmcnv git merge --continue --no-verify
+aa gcnv git commit --no-verify
+
+aa grbiom git rebase -i origin/master
+aa gcamm git commit --amend
+aa grbom git rebase origin/master
+
+
+aa gcpc git cherry-pick --continue
+
+aa win whatsin

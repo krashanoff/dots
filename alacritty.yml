@@ -131,8 +131,6 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    #family: CommitMono
-    #family: GohuFont Nerd Font Mono
     family: FiraCode Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.

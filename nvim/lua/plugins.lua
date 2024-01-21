@@ -33,13 +33,133 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 return require('lazy').setup({
+  -- Themes
+  'sainnhe/everforest',
+  'EdenEast/nightfox.nvim',
+  "rebelot/kanagawa.nvim",
+  {
+    'sainnhe/sonokai',
+    config = function()
+      vim.g.sonokai_dim_inactive_windows = true
+      vim.g.sonokai_show_eob = true
+    end,
+  },
+  {
+    'catppuccin/nvim',
+    name = "catppuccin",
+    dependencies = {
+        'lewis6991/gitsigns.nvim',
+    },
+    config = function()
+        require('catppuccin').setup({
+            flavour = 'mocha',
+            background = {
+                light = 'latte',
+                dark = 'mocha',
+            },
+            styles = {
+                comments = { 'italic' },
+            },
+            integrations = {
+                gitsigns = true,
+                beacon = true,
+                --neogit = true,
+                gitgutter = true,
+                which_key = true,
+                nvimtree = true,
+                telescope = true,
+                hop = true,
+                lsp_saga = true,
+            },
+        })
+    end,
+  },
+
   -- QOL
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
-  'sainnhe/everforest',
-  'EdenEast/nightfox.nvim',
-  'sainnhe/sonokai',
+  {
+    'rcarriga/nvim-notify',
+    config = function()
+        vim.notify = require("notify")
+    end
+  },
+  {
+    'DanilaMihailov/beacon.nvim',
+    enabled = function()
+        return vim.g.neovide == nil
+    end,
+  },
+  { 'willothy/flatten.nvim', config = true },
+  {
+      'pocco81/true-zen.nvim',
+      opts = {
+        integrations = {
+            twilight = true,
+        },
+      },
+      config = function()
+          api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
+          api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
+          api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
+          api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
+      end,
+  },
+  {
+    'akinsho/toggleterm.nvim',
+    config = function()
+        local Terminal  = require('toggleterm.terminal').Terminal
+        local lazygit = Terminal:new({
+            cmd = "lazygit",
+            hidden = true,
+            direction = "float",
+        })
+
+        function _lazygit_toggle()
+          lazygit:toggle()
+        end
+
+        vim.api.nvim_set_keymap("n", "<leader>G", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+    end,
+  },
+  {
+    'folke/twilight.nvim',
+    config = function()
+        vim.api.nvim_set_keymap("n", "<leader>X", "<cmd>Twilight<CR>", {noremap = true, silent = true})
+    end,
+  },
+  {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup({
+          triggers_blacklist = {
+              i = { "<leader>" },
+          },
+      })
+    end,
+  },
+  {
+    'phaazon/hop.nvim',
+    branch = 'v2',
+    config = function()
+        require'hop'.setup()
+    end,
+    init = function()
+        local hop = require('hop')
+
+        vim.keymap.set('', 's', function()
+            hop.hint_words()
+            -- hop.hint_char2({ direction = directions.AFTER_CURSOR, current_line_only = false })
+        end, {remap=true})
+        -- vim.keymap.set('', 'S', function()
+        --     hop.hint_char2({ direction = directions.BEFORE_CURSOR, current_line_only = false })
+        -- end, {remap=true})
+    end,
+  },
 
   -- Fun little extra tidbit for some reason idk lol
   {
@@ -54,7 +174,36 @@ return require('lazy').setup({
   'mfussenegger/nvim-dap',
   'theHamsta/nvim-dap-virtual-text',
   {
+      'mfussenegger/nvim-dap',
+      event = "VeryLazy",
+  },
+  {
+      'theHamsta/nvim-dap-virtual-text',
+      event = "VeryLazy",
+  },
+  {
+      'williamboman/mason.nvim',
+      config = function (self, opts)
+        require("mason").setup()
+      end,
+  },
+  {
+      'williamboman/mason-lspconfig.nvim',
+      dependencies = {
+          'williamboman/mason.nvim',
+          'neovim/nvim-lspconfig',
+      },
+      config = function()
+        require("mason-lspconfig").setup()
+
+        require("mason-lspconfig").setup {
+            ensure_installed = { "lua_ls", "rust_analyzer", "gopls", "golangci_lint_ls" },
+        }
+      end,
+  },
+  {
       'rcarriga/nvim-dap-ui',
+      event = "VeryLazy",
       dependencies = {
           'mfussenegger/nvim-dap',
           'leoluz/nvim-dap-go',
@@ -72,128 +221,15 @@ return require('lazy').setup({
       end,
   },
 
+  -- LSP stuff
+  'neovim/nvim-lspconfig',
   {
-      'pocco81/true-zen.nvim',
-      opts = {
-        integrations = {
-            twilight = true,
-        },
+    'j-hui/fidget.nvim',
+    opts = {
+      display = {
+          render_limit = 4,
       },
-      config = function()
-          api.nvim_set_keymap("n", "<leader>zn", ":TZNarrow<CR>", {})
-          api.nvim_set_keymap("v", "<leader>zn", ":'<,'>TZNarrow<CR>", {})
-          api.nvim_set_keymap("n", "<leader>zf", ":TZFocus<CR>", {})
-          api.nvim_set_keymap("n", "<leader>zm", ":TZMinimalist<CR>", {})
-          api.nvim_set_keymap("n", "<leader>za", ":TZAtaraxis<CR>", {})
-      end,
-  },
-  {
-    'folke/twilight.nvim',
-    config = function()
-        vim.api.nvim_set_keymap("n", "<leader>X", "<cmd>Twilight<CR>", {noremap = true, silent = true})
-    end,
-  },
-  {
-      'akinsho/toggleterm.nvim',
-      config = function()
-          local Terminal  = require('toggleterm.terminal').Terminal
-          local lazygit = Terminal:new({
-              cmd = "lazygit",
-              hidden = true,
-              direction = "float",
-          })
-
-          function _lazygit_toggle()
-            lazygit:toggle()
-          end
-
-          vim.api.nvim_set_keymap("n", "<leader>G", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
-      end,
-  },
-  -- Themes
-  {
-      'chriskempson/base16-vim'
-  },
-  'vim-scripts/fu',
-  'junegunn/seoul256.vim',
-  {
-      'sainnhe/sonokai',
-      config = function()
-        vim.g.sonokai_dim_inactive_windows = true
-        vim.g.sonokai_show_eob = true
-      end,
-  },
-  'nvim-neorg/neorg-telescope',
-  {
-      'phaazon/hop.nvim',
-      branch = 'v2',
-      config = function()
-          require'hop'.setup()
-      end,
-      init = function()
-          local hop = require('hop')
-
-          vim.keymap.set('', 's', function()
-              hop.hint_words()
-              -- hop.hint_char2({ direction = directions.AFTER_CURSOR, current_line_only = false })
-          end, {remap=true})
-          -- vim.keymap.set('', 'S', function()
-          --     hop.hint_char2({ direction = directions.BEFORE_CURSOR, current_line_only = false })
-          -- end, {remap=true})
-      end,
-  },
-  {
-    "folke/which-key.nvim",
-    config = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-      require("which-key").setup({
-          triggers_blacklist = {
-              i = { "<leader>" },
-          },
-      })
-    end,
-  },
-  { 'willothy/flatten.nvim', config = true },
-  "rebelot/kanagawa.nvim",
-  {
-      'DanilaMihailov/beacon.nvim',
-      enabled = function()
-          return vim.g.neovide == nil
-      end,
-  },
-  {
-      'rcarriga/nvim-notify',
-      config = function()
-          vim.notify = require("notify")
-      end
-  },
-  {
-      'catppuccin/nvim',
-      name = "catppuccin",
-      config = function()
-          require('catppuccin').setup({
-              flavour = 'mocha',
-              background = {
-                  light = 'latte',
-                  dark = 'mocha',
-              },
-              styles = {
-                  comments = { 'italic' },
-              },
-              integrations = {
-                  gitsigns = true,
-                  beacon = true,
-                  --neogit = true,
-                  gitgutter = true,
-                  which_key = true,
-                  nvimtree = true,
-                  telescope = true,
-                  hop = true,
-                  lsp_saga = true,
-              },
-          })
-      end,
+    },
   },
   {
       'nvim-treesitter/nvim-treesitter',
@@ -209,7 +245,7 @@ return require('lazy').setup({
   },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.1',
+    tag = '0.1.4',
     dependencies = {
         'nvim-lua/plenary.nvim',
         'debugloop/telescope-undo.nvim',
@@ -380,15 +416,7 @@ return require('lazy').setup({
           })
       end,
       },
-  {
-      'ms-jpq/coq.artifacts',
-      branch = 'artifacts',
-  },
-  {
-      'ms-jpq/coq.thirdparty',
-      branch = '3p',
-  },
-  {
+    {
       'nvim-tree/nvim-tree.lua',
       tag = 'nightly',
       dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -552,16 +580,6 @@ return require('lazy').setup({
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
-  },
-  {
-      'neovim/nvim-lspconfig',
-  },
-  {
-      'j-hui/fidget.nvim',
-      branch = 'legacy',
-      config = function()
-          require'fidget'.setup()
-      end,
   },
 })
 
