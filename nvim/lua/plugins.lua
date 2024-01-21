@@ -33,8 +33,14 @@ return require('lazy').setup({
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
-  'mfussenegger/nvim-dap',
-  'theHamsta/nvim-dap-virtual-text',
+  {
+      'mfussenegger/nvim-dap',
+      event = "VeryLazy",
+  },
+  {
+      'theHamsta/nvim-dap-virtual-text',
+      event = "VeryLazy",
+  },
   {
       'williamboman/mason.nvim',
       config = function (self, opts)
@@ -57,6 +63,7 @@ return require('lazy').setup({
   },
   {
       'rcarriga/nvim-dap-ui',
+      event = "VeryLazy",
       dependencies = {
           'mfussenegger/nvim-dap',
       },
@@ -366,24 +373,6 @@ return require('lazy').setup({
           })
       end,
       },
-
-  --        local api = vim.api
-  --        api.nvim_create_autocmd('BufWritePre', {
-  --          pattern = '*.go',
-  --          callback = function()
-  --            vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-  --          end
-  --        })
-  --    end,
-  --},
-  {
-      'ms-jpq/coq.artifacts',
-      branch = 'artifacts',
-  },
-  {
-      'ms-jpq/coq.thirdparty',
-      branch = '3p',
-  },
   {
       'nvim-tree/nvim-tree.lua',
       tag = 'nightly',
@@ -552,12 +541,12 @@ return require('lazy').setup({
   {
       'neovim/nvim-lspconfig',
   },
-  --{
-  --    'j-hui/fidget.nvim',
-  --    branch = 'legacy',
-  --    config = function()
-  --        require'fidget'.setup()
-  --    end,
-  --},
+  {
+      'j-hui/fidget.nvim',
+      branch = 'legacy',
+      config = function()
+          require'fidget'.setup()
+      end,
+  },
 })
 
