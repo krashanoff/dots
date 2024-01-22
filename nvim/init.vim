@@ -20,8 +20,8 @@ nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
 
 " ez edit
 nnoremap <silent><leader>ini :e ~/.config/nvim/init.vim<cr>
-nnoremap <silent><leader>iniv :e ~/.config/nvim/init.vim<cr>
-nnoremap <silent><leader>inil :e ~/.config/nvim/lua/plugins.lua<cr>
+nnoremap <silent><leader>inv :e ~/.config/nvim/init.vim<cr>
+nnoremap <silent><leader>inl :e ~/.config/nvim/lua/newinit.lua<cr>
 
 exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
 
@@ -32,7 +32,6 @@ let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 0
 
 set background=dark
-
 colorscheme catppuccin
 
 " I dont always like pressing shift, but sometimes it's

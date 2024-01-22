@@ -1,6 +1,6 @@
 -- lua moment
 
-local PLUGINS_MODULE <const> = "plugins"
+local PLUGINS_MODULE = "plugins"
 
 -- Remove netrw
 vim.g.loaded_netrw = 1

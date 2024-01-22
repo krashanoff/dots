@@ -1,6 +1,7 @@
 -- Anything related to language-specific shortcuts.
 
 local api = vim.api
+local keymap = vim.keymap.set
 
 return {
   -- Debug adapter stuff
