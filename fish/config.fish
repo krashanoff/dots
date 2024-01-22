@@ -1,5 +1,3 @@
-set fish_greeting
-
 # Config
 set -Ux XDG_CONFIG_HOME $HOME/.config
 set -Ux EDITOR nvim
@@ -13,12 +11,13 @@ else if test -e /etc/debian_version
 end
 
 # Homebrew
-if "$HOST_TYPE" = "mac"
+if [ "$HOST_TYPE" = "mac" ]
     eval (/opt/homebrew/bin/brew shellenv)
 end
 
 # Toolchain miscellanea
 fish_add_path -Up $HOME/.cargo/bin
+set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 
 if not test -e $HOME/.asdf/asdf.fish
     git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
@@ -27,7 +26,7 @@ source $HOME/.asdf/asdf.fish
 mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
 
 # pnpm
-if $HOST_TYPE = 'mac'
+if [ "$HOST_TYPE" = 'mac' ]
     set -Ux PNPM_HOME "/Users/leo/Library/pnpm"
 else
     set -Ux PNPM_HOME "~/.pnpm"
@@ -138,6 +137,4 @@ aa gcauadsqp gcloud auth application-default set-quota-project
 aa gc gcloud
 
 aa win whatsin
-
-set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 

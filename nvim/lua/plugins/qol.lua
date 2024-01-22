@@ -91,8 +91,10 @@ return {
   {
     'j-hui/fidget.nvim',
     opts = {
-      display = {
+      progress = {
+        display = {
           render_limit = 4,
+        },
       },
     },
   },
