@@ -26,7 +26,7 @@ nnoremap <silent><leader>inil :e ~/.config/nvim/lua/plugins.lua<cr>
 exec 'source ' . $XDG_CONFIG_HOME . '/nvim/base.vim'
 
 " plugins
-lua require('plugins')
+lua require('newinit')
 
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 0

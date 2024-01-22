@@ -1,0 +1,28 @@
+{
+    "workspace.library": [
+        "/Users/leo/.config/nvim",
+        "/Users/leo/.local/share/nvim/lazy/lazy.nvim",
+        "/Users/leo/.local/share/nvim/lazy/coq_nvim",
+        "/Users/leo/.local/share/nvim/lazy/diffview.nvim",
+        "/Users/leo/.local/share/nvim/lazy/neogit",
+        "/Users/leo/.local/share/nvim/lazy/vim-signature",
+        "/Users/leo/.local/share/nvim/lazy/vim-fugitive",
+        "/Users/leo/.local/share/nvim/lazy/nvim-lspconfig",
+        "/Users/leo/.local/share/nvim/lazy/promise-async",
+        "/Users/leo/.local/share/nvim/lazy/nvim-ufo",
+        "/Users/leo/.local/share/nvim/lazy/telescope.nvim",
+        "/Users/leo/.local/share/nvim/lazy/vim-sleuth",
+        "/Users/leo/.local/share/nvim/lazy/telescope-undo.nvim",
+        "/Users/leo/.local/share/nvim/lazy/plenary.nvim",
+        "/Users/leo/.local/share/nvim/lazy/gitsigns.nvim",
+        "/Users/leo/.local/share/nvim/lazy/nvim-dap",
+        "/Users/leo/.local/share/nvim/lazy/hop.nvim",
+        "/opt/homebrew/Cellar/neovim/0.9.0/share/nvim/runtime",
+        "/opt/homebrew/Cellar/neovim/0.9.0/lib/nvim",
+        "/Users/leo/.local/state/nvim/lazy/readme",
+        "/Users/leo/.local/share/nvim/lazy/vim-signature/after",
+        "/opt/homebrew/Cellar/lua-language-server/3.6.20/libexec/meta/1ec2c2aa",
+        "/opt/homebrew/Cellar/lua-language-server/3.6.20/libexec/meta/2f7deec5"
+    ],
+    "workspace.checkThirdParty": false
+}
