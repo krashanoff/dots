@@ -2,42 +2,46 @@ set fish_greeting
 
 # Config
 set -Ux XDG_CONFIG_HOME $HOME/.config
+set -Ux EDITOR nvim
 
-# Homebrew
+# Try our best to ID the host
+set -g HOST_TYPE "idk"
 if test (uname) = "Darwin"
-	eval (/opt/homebrew/bin/brew shellenv)
+    set -g HOST_TYPE "mac"
+else if test -e /etc/debian_version
+    set -g HOST_TYPE "debian"
 end
 
-# Rust
+# Homebrew
+if "$HOST_TYPE" = "mac"
+    eval (/opt/homebrew/bin/brew shellenv)
+end
+
+# Toolchain miscellanea
 fish_add_path -Up $HOME/.cargo/bin
 
-# asdf, mostly just used for node
+if not test -e $HOME/.asdf/asdf.fish
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+end
 source $HOME/.asdf/asdf.fish
 mkdir -p ~/.config/fish/completions; and ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions >/dev/null 2>&1
 
 # pnpm
-set -Ux PNPM_HOME "/Users/leo/Library/pnpm"
+if $HOST_TYPE = 'mac'
+    set -Ux PNPM_HOME "/Users/leo/Library/pnpm"
+else
+    set -Ux PNPM_HOME "~/.pnpm"
+end
 if not string match -q -- $PNPM_HOME $PATH
   fish_add_path -Up "$PNPM_HOME"
 end
-# pnpm end
-
-# Go
-fish_add_path -Up /opt/homebrew/opt/go@1.20/bin
-fish_add_path -Up /Users/leo/go/bin
 
 # Vars
-set -Ux EDITOR nvim
+test -f ~/.config/fish/kuebctl_aliases.fish && source ~/.config/fish/kuebctl_aliases.fish
 
-test -f ~/.kubectl_aliases.fish && source ~/.kubectl_aliases.fish
-
-if command -sq glab
-	glab completion -s fish | source
-end
-
-# Abbreviations
+# Abbreviations are useful :)
 function aa
-	abbr --add $argv
+    abbr --add $argv
 end
 
 aa lsal ls -al
@@ -93,6 +97,13 @@ aa gpunv git push --no-verify
 aa gpnv git push --no-verify
 aa gpufnv git push --force --no-verify
 aa gra git remote add
+aa gmc git merge --continue
+aa gmcnv git merge --continue --no-verify
+aa gcnv git commit --no-verify
+aa grbiom git rebase -i origin/master
+aa gcamm git commit --amend
+aa grbom git rebase origin/master
+aa gcpc git cherry-pick --continue
 
 # shortcuts that aren't added by kubectl_aliases
 aa kx kubectx
@@ -114,11 +125,9 @@ aa gpfo git push --force origin
 
 # Need to add handlers to the config file instead of autoload
 function kube_change --on-event kubectx_postexec
-	echo -ns (/opt/homebrew/bin/kubectx -c) > $HOME/.current_kubectx
-	echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
+    echo -ns (/opt/homebrew/bin/kubectx -c) > $HOME/.current_kubectx
+    echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
 end
-
-#set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 
 # kubectl stuff that isn't normally there.
 aa kgjo kubectl get jobs
@@ -128,17 +137,7 @@ aa kgpooname kubectl get pods -o=name
 aa gcauadsqp gcloud auth application-default set-quota-project
 aa gc gcloud
 
+aa win whatsin
+
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 
-aa gmc git merge --continue
-aa gmcnv git merge --continue --no-verify
-aa gcnv git commit --no-verify
-
-aa grbiom git rebase -i origin/master
-aa gcamm git commit --amend
-aa grbom git rebase origin/master
-
-
-aa gcpc git cherry-pick --continue
-
-aa win whatsin
