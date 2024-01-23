@@ -5,8 +5,9 @@
 
 local M = {}
 
-M.action = function()
+local api = vim.api
 
+M.action = function()
 end
 
 return M

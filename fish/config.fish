@@ -138,3 +138,7 @@ aa gc gcloud
 
 aa win whatsin
 
+
+aa nv nvim
+
+aa gcane git commit --amend --no-edit

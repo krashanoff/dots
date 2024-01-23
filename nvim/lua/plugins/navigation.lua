@@ -27,6 +27,9 @@ return {
             },
         })
         require("telescope").load_extension("undo")
+
+        keymap('n', '<leader>fs', ":Telescope lsp_document_symbols<CR>", {})
+        keymap('n', '<leader>fS', ":Telescope lsp_workspace_symbols<CR>", {})
     end,
   },
 
