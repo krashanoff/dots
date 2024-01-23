@@ -1,66 +1,4 @@
 function fish_prompt
-    set -l __last_command_exit_status $status
-
-    if not set -q -g __fish_arrow_functions_defined
-        set -g __fish_arrow_functions_defined
-
-        function _git_branch_name
-            set -l branch (git symbolic-ref --quiet HEAD 2>/dev/null)
-            if set -q branch[1]
-                echo (string replace -r '^refs/heads/' '' $branch)
-            else
-                echo (git rev-parse --short HEAD 2>/dev/null)
-            end
-        end
-
-        function _is_git_dirty
-            not command git diff-index --cached --quiet HEAD -- &>/dev/null
-            or not command git diff --no-ext-diff --quiet --exit-code &>/dev/null
-        end
-
-        function _is_git_repo
-            type -q git
-            or return 1
-            git rev-parse --git-dir >/dev/null 2>&1
-        end
-
-        function _is_git_merging
-            git rev-list -1 MERGE_HEAD
-        end
-
-        function _hg_branch_name
-            echo (hg branch 2>/dev/null)
-        end
-
-        function _is_hg_dirty
-            set -l stat (hg status -mard 2>/dev/null)
-            test -n "$stat"
-        end
-
-        function _is_hg_repo
-            fish_print_hg_root >/dev/null
-        end
-
-        function _repo_branch_name
-            _$argv[1]_branch_name
-        end
-
-        function _is_repo_dirty
-            _is_$argv[1]_dirty
-        end
-
-        function _repo_type
-            if _is_hg_repo
-                echo hg
-                return 0
-            else if _is_git_repo
-                echo git
-                return 0
-            end
-            return 1
-        end
-    end
-
     set -l cyan (set_color -o cyan)
     set -l yellow (set_color -o yellow)
     set -l red (set_color -o red)
@@ -68,34 +6,12 @@ function fish_prompt
     set -l blue (set_color -o blue)
     set -l normal (set_color normal)
 
-    set -l arrow_color "$green"
-    if test $__last_command_exit_status != 0
-        set arrow_color "$red"
-    end
-
-    set -l arrow "$arrow_color-> "
     set -l is_root (id -u)
     if test $is_root = 0
         set arrow "$arrow_color# "
     end
 
     set -l cwd $cyan(string shorten -m 45 (prompt_pwd -d 1))
-
-    set -l repo_info
-    if set -l repo_type (_repo_type)
-        set -l repo_branch $red(_repo_branch_name $repo_type)
-        set repo_info "$green $repo_type:("
-
-        if _is_repo_dirty $repo_type
-            set -l dirty "$yellow!="
-            set repo_info "$repo_info$dirty"
-        else
-            set -l other "$yellow=="
-            set repo_info "$repo_info$other"
-        end
-
-        set repo_info "$repo_info$repo_branch$green)"
-    end
 
     set -l k8info
     if test -e $HOME/.current_kubectx; and test -e $HOME/.current_kubens
@@ -106,15 +22,16 @@ function fish_prompt
         echo -s $k8info $repo_info
     end
 
-    if test (uname) = "Darwin"
-        set hostname_parts (string split . (hostname))
-    else
-        set hostname_parts (string split . (hostname))
+    switch $HOST_TYPE
+        case "debian"
+            set hostname_parts (string split . (hostname))
+        case '*'
+            set hostname_parts (string split . (hostname))
     end
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$blue$hostname_parts[1]
 
-    set -l prompt $arrow $user_part$normal':'$green$cwd
+    set -l prompt $user_part$normal':'$green$cwd
     if set -q $k8info
         set prompt "$prompt $repo_info"
     end
