@@ -142,3 +142,15 @@ aa win whatsin
 aa nv nvim
 
 aa gcane git commit --amend --no-edit
+
+aa gmab git merge --abort
+
+aa grbcne git rebase --continue --no-edit
+
+aa uvp uv pip
+
+aa gcps git cherry-pick --skip
+
+aa grbcne GIT_EDITOR=true git rebase --continue
+
+aa grvc git revert --continue
