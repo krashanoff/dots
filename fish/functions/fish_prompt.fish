@@ -1,5 +1,6 @@
 function fish_prompt
     set -l cyan (set_color -o cyan)
+    set -l pink (set_color -o magenta)
     set -l yellow (set_color -o yellow)
     set -l red (set_color -o red)
     set -l green (set_color -o green)
@@ -24,12 +25,16 @@ function fish_prompt
 
     switch $HOST_TYPE
         case "debian"
-            set hostname_parts (string split . (hostname))
+            set -l parts (string split . (hostname))[1]
+            set hostname_part $yellow$parts$normal
+        case "mac"
+            set -l parts (string split . (hostname))[1]
+            set hostname_part $pink$parts$normal
         case '*'
-            set hostname_parts (string split . (hostname))
+            set hostname_part (string split . (hostname))
     end
     set -l whoami_part $cyan(whoami)
-    set user_part $whoami_part$normal@$blue$hostname_parts[1]
+    set user_part $whoami_part$normal@$hostname_part
 
     set -l prompt $user_part$normal':'$green$cwd
     if set -q $k8info
