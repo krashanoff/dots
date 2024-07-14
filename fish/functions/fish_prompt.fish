@@ -16,11 +16,10 @@ function fish_prompt
 
     set -l k8info
     if test -e $HOME/.current_kubectx; and test -e $HOME/.current_kubens
-        set -l k8nsinfo
-        set -l k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
-        set -l k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
-        set -l k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
-        echo -s $k8info $repo_info
+        set k8nsinfo
+        set k8info "["$blue(string shorten --left --max 40 (string split '_' (cat $HOME/.current_kubectx))[-1])$normal
+        set  k8nsinfo (string join '-' (string split '-' (cat $HOME/.current_kubens))[-3..-1])
+        set k8info $k8info"/"$green(string shorten --left --max 30 $k8nsinfo)$normal"]"
     end
 
     switch $HOST_TYPE
@@ -36,10 +35,16 @@ function fish_prompt
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$hostname_part
 
-    set -l prompt $user_part$normal':'$green$cwd
-    if set -q $k8info
-        set prompt "$prompt $repo_info"
+    if test -n $k8info
+        echo -s $k8info
     end
+
+    set -l repo_info (fish_git_information_status)
+    if test -n $repo_info
+        echo -s $repo_info
+    end
+
+    set -l prompt $user_part$normal':'$green$cwd
     set prompt $prompt$normal ' '
     echo -n -s $prompt
 end
