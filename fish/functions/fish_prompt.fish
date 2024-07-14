@@ -35,13 +35,8 @@ function fish_prompt
     set -l whoami_part $cyan(whoami)
     set user_part $whoami_part$normal@$hostname_part
 
-    if test -n $k8info
+    if test -n "$k8info"
         echo -s $k8info
-    end
-
-    set -l repo_info (fish_git_information_status)
-    if test -n $repo_info
-        echo -s $repo_info
     end
 
     set -l prompt $user_part$normal':'$green$cwd
