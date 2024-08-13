@@ -51,6 +51,11 @@ end
 # Vars
 test -f ~/.config/kuebctl_aliases.fish && source ~/.config/kuebctl_aliases.fish
 
+# Abbreviations are useful :)
+function aa
+    abbr --add $argv
+end
+
 # shortcuts that aren't added by kubectl_aliases
 aa kx kubectx
 aa kcx kubectx
@@ -64,11 +69,6 @@ aa kgpooname kubectl get pods -o=name
 
 # gcloud annoyances
 aa gcauadsqp gcloud auth application-default set-quota-project
-
-# Abbreviations are useful :)
-function aa
-    abbr --add $argv
-end
 
 aa lsal ls -al
 
