@@ -9,14 +9,18 @@ vim.g.loaded_netrwPlugin = 1
 local api = vim.api
 local keymap = vim.keymap.set
 
+-- IntelliJ sort of convinced me that space is a good leader.
+vim.g.mapleader = ';'
+
 -- It's nice to be able to leader-cmd when we use colon.
 keymap('n', '<leader>x', ':x<CR>', {})
 
+-- Register lua stuff for the langauge server.
 local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
--- Need to have 24-bit color enabled
+-- Need to have 24-bit color enabled so the UI isn't a nightmare tbh
 if os.getenv("TERM") == "xterm-256color" then
     vim.opt.termguicolors = true
 end
@@ -35,3 +39,4 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require('lazy').setup(PLUGINS_MODULE)
+

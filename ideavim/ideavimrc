@@ -1,0 +1,146 @@
+if has('ide')
+
+" I like absrel line numbers
+set relativenumber
+set number
+
+set hlsearch " highlight searches
+set ignorecase
+set smartcase
+set incsearch
+set wrapscan
+
+set gdefault
+set history=10000
+set scrolloff=5 sidescrolloff=10
+set clipboard=unnamedplus,unnamed,ideaput
+
+set multiple-cursors
+set commentary
+set ideajoin
+
+" I want to be able to get out of insert mode without giving myself RSI, pls
+" This might need changing if I end up writing lisp
+" imap ;; <Esc>
+
+let mapleader = ' '
+
+" v motion doesn't exist
+nmap dvb dbx
+nmap dvB dBx
+
+" Onhover
+nmap K <Action>(ShowHoverInfo)
+imap <C-\> <Action>(ShowHoverInfo)
+
+" IdeaVim things
+nmap <leader>cr <Action>(IdeaVim.ReloadVimRc.reload)
+nmap <leader>ce :e ~/.config/ideavim/ideavimrc<CR>
+" Easy editor action tracking
+nmap <leader>I <Action>(VimFindActionIdAction)
+
+nmap <C-[> <Action>(MethodUp)
+nmap <C-]> <Action>(MethodDown)
+
+nmap <leader>w <Action>(SaveAll)
+nmap gR <Action>(RenameElement)
+
+" Get out of my hair pls
+nmap <leader>O <Action>(HideAllWindows)
+nmap <leader>z <Action>(ToggleDistractionFreeMode)
+nmap <leader>Z <Action>(ToggleZenMode)
+
+" Navigation and such (all the bars in the UI)
+nmap <leader>j <Action>(Switcher)
+nmap <leader>bs <Action>(ActivateBookmarksToolWindow)
+nmap <leader>bb <Action>(Bookmarks)
+nmap <leader>bn <Action>(ActivateProjectToolWindow)
+nmap <leader>si <Action>(SelectIn)
+
+nmap <leader>bD <Action>(ServiceView.ActivateDockerMainServiceViewContributor)
+nmap <leader>T <Action>(ActivateTerminalToolWindow)
+
+nmap <leader>bd <Action>(ActivateDebugToolWindow)
+nmap <leader>br <Action>(ActivateRunToolWindow)
+
+" Double-leader bindings (things to get you out of insert mode)
+
+" Splits
+nmap <leader>v <Action>(SplitVertically)
+nmap <leader>h <Action>(SplitHorizontally)
+nmap <C-l> <Action>(NextSplitter)
+nmap <C-h> <Action>(PrevSplitter)
+nmap <leader>sq <Action>(Unsplit)
+
+" Move lines like a normal human
+map <M-k> <Action>(MoveLineUp)
+map <M-j> <Action>(MoveLineDown)
+
+" Doc comments
+nmap <leader>gr <Action>(ToggleRenderedDocPresentation)
+nmap <leader>R <Action>(Refactorings.QuickListPopupAction)
+
+" Bookmarks
+nmap m` <Action>(ToggleBookmarkWithMnemonic)
+nmap gm <Action>(ShowTypeBookmarks)
+nmap `m <Action>(ShowTypeBookmarks)
+nmap 'm <Action>(ShowTypeBookmarks)
+nmap gb <Action>(ShowBookmarks)
+
+" Tabs
+nmap <leader>ro <Action>(ReopenClosedTab)
+nmap <leader>q <Action>(CloseContent)
+
+" Find stuff
+nmap <leader><leader> <Action>(SearchEverywhere)
+nmap <leader>F <Action>(FindInPath)
+nmap <leader>f <Action>(GotoFile)
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fs <Action>(GotoSymbol)
+nmap <leader>ft <Action>(TextSearchAction)
+nmap <leader>fu <Action>(FindUsages)
+nmap <leader>fd <Action>(GotoDatabaseObject)
+
+" Symbols
+nmap <leader>e <Action>(GotoFile)
+
+" Declarations and jumping
+nmap gd <Action>(GotoDeclaration)
+nmap gD <Action>(GotoDefinition)
+nmap gi <Action>(GotoImplementation)
+nmap gI <Action>(GotoSuperMethod)
+nmap gS <Action>(GotoSuperMethod)
+nmap gR <Action>(GotoRelated)
+nmap gh <Action>(CallHierarchy)
+nmap gf <Action>(FileStructurePopup)
+
+nmap <leader>L :nohl<cr>
+
+" Debugging
+nmap <leader>ds <Action>(Stop)
+nmap <leader>dr <Action>(Debug)
+nmap <leader>db <Action>(ToggleLineBreakpoint)
+nmap <leader>dB <Action>(ViewBreakpoints)
+
+" Documentation
+nmap <leader>sd <Action>(QuickJavaDoc)
+
+" Git
+nmap <leader>G <Action>(ActivateVersionControlToolWindow)
+nmap <leader>Gb <Action>(Git.Branches)
+nmap <leader>Gc <Action>(CheckinProject)
+nmap <leader>Gp <Action>(Vcs.Pull)
+nmap <leader>GP <Action>(Vcs.Push)
+
+nmap <leader>F <Action>(FindUsages)
+
+" Map \r to the Reformat Code action
+nmap \r <Action>(ReformatCode)
+
+nmap H <Action>(ShowHoverInfo)
+nmap <leader>D <Action>(QuickImplementations)
+
+" React
+" nmap com.intellij.reactbuddy.OutlineVisibleAction
+
+endif

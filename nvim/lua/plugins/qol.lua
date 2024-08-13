@@ -2,7 +2,7 @@ local api = vim.api
 
 return {
   require('plugins.statusline'),
-  
+
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',
@@ -12,12 +12,6 @@ return {
     config = function()
         vim.notify = require("notify")
     end
-  },
-  {
-    'DanilaMihailov/beacon.nvim',
-    enabled = function()
-        return vim.g.neovide == nil
-    end,
   },
   { 'willothy/flatten.nvim', config = true },
   {
@@ -60,13 +54,11 @@ return {
   },
   {
     "folke/which-key.nvim",
+    dependencies = { 'echasnovski/mini.icons' },
     config = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 300
       require("which-key").setup({
-          triggers_blacklist = {
-              i = { "<leader>" },
-          },
       })
     end,
   },
@@ -87,16 +79,6 @@ return {
         --     hop.hint_char2({ direction = directions.BEFORE_CURSOR, current_line_only = false })
         -- end, {remap=true})
     end,
-  },
-  {
-    'j-hui/fidget.nvim',
-    opts = {
-      progress = {
-        display = {
-          render_limit = 4,
-        },
-      },
-    },
   },
   {
     'lewis6991/gitsigns.nvim',

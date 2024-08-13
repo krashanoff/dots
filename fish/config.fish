@@ -2,7 +2,7 @@
 set -Ux XDG_CONFIG_HOME $HOME/.config
 set -Ux EDITOR nvim
 
-# Try our best to ID the host
+# Try our best to ID the host, by host type or hostname or w/e
 set -g HOST_TYPE "idk"
 if test (uname) = "Darwin"
     set -g HOST_TYPE "mac"
@@ -15,7 +15,10 @@ if [ "$HOST_TYPE" = "mac" ]
     eval (/opt/homebrew/bin/brew shellenv)
 end
 
+#
 # Toolchain miscellanea
+#
+
 fish_add_path -Up $HOME/.cargo/bin
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /Users/leo/.ghcup/bin $PATH # ghcup-env
 
@@ -35,8 +38,32 @@ if not string match -q -- $PNPM_HOME $PATH
   fish_add_path -Up "$PNPM_HOME"
 end
 
+# Need to add handlers to the config file instead of autoload
+function kube_change --on-event kubectx_postexec
+    echo -ns (/opt/homebrew/bin/kubectx -c) > $HOME/.current_kubectx
+    echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
+end
+
+#
+# tools
+#
+
 # Vars
-test -f ~/.config/fish/kuebctl_aliases.fish && source ~/.config/fish/kuebctl_aliases.fish
+test -f ~/.config/kuebctl_aliases.fish && source ~/.config/kuebctl_aliases.fish
+
+# shortcuts that aren't added by kubectl_aliases
+aa kx kubectx
+aa kcx kubectx
+aa kns kubens
+aa ks kubens
+aa kn kubens
+aa kgjo kubectl get jobs
+aa kgjob kubectl get jobs
+aa kgjobs kubectl get jobs
+aa kgpooname kubectl get pods -o=name
+
+# gcloud annoyances
+aa gcauadsqp gcloud auth application-default set-quota-project
 
 # Abbreviations are useful :)
 function aa
@@ -103,14 +130,15 @@ aa grbiom git rebase -i origin/master
 aa gcamm git commit --amend
 aa grbom git rebase origin/master
 aa gcpc git cherry-pick --continue
+aa gcane git commit --amend --no-edit
+aa gmab git merge --abort
+aa grbcne git rebase --continue --no-edit
+aa gcps git cherry-pick --skip
+aa grbcne GIT_EDITOR=true git rebase --continue
+aa grvc git revert --continue
+aa gpfo git push --force origin
 
-# shortcuts that aren't added by kubectl_aliases
-aa kx kubectx
-aa kcx kubectx
-aa kns kubens
-aa ks kubens
-aa kn kubens
-
+# helm
 aa hl helm list
 aa hla helm list --all
 aa hrb helm rollback
@@ -120,37 +148,17 @@ aa hh helm history
 
 aa guivm neovide --multigrid
 aa nvd neovide --multigrid
-aa gpfo git push --force origin
-
-# Need to add handlers to the config file instead of autoload
-function kube_change --on-event kubectx_postexec
-    echo -ns (/opt/homebrew/bin/kubectx -c) > $HOME/.current_kubectx
-    echo -ns (/opt/homebrew/bin/kubens -c) > $HOME/.current_kubens
-end
-
-# kubectl stuff that isn't normally there.
-aa kgjo kubectl get jobs
-aa kgjob kubectl get jobs
-aa kgjobs kubectl get jobs
-aa kgpooname kubectl get pods -o=name
-aa gcauadsqp gcloud auth application-default set-quota-project
-aa gc gcloud
-
-aa win whatsin
-
-
 aa nv nvim
 
-aa gcane git commit --amend --no-edit
+# work-specific. not committed /shrug
+aa win whatsin
 
-aa gmab git merge --abort
-
-aa grbcne git rebase --continue --no-edit
-
+aa gc gcloud
 aa uvp uv pip
 
-aa gcps git cherry-pick --skip
+# tmux blah
+aa tmx tmux
+aa tx tmux
+aa tm tmux
+aa tma tmux a
 
-aa grbcne GIT_EDITOR=true git rebase --continue
-
-aa grvc git revert --continue

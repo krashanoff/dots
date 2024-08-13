@@ -33,31 +33,21 @@ return {
     end,
   },
 
+  -- I used this after it was recommended in place of nvim-tree due to some weird
+  -- issues on Windows.
   {
-    'nvim-tree/nvim-tree.lua',
-    tag = 'nightly',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function ()
-        require('nvim-tree').setup({
-            view = {
-                width = 30,
-            },
-            renderer = {
-                group_empty = true,
-            },
-            git = {
-                ignore = false,
-            },
-        })
-    end,
-    init = function ()
-        keymap('n', '<leader>T', function()
-            local nvim_tree_api = require'nvim-tree.api'
-            nvim_tree_api.tree.toggle({
-                ['find_file'] = true,
-            })
-        end)
-    end,
+      'nvim-neo-tree/neo-tree.nvim',
+      branch = 'v3.x',
+      dependencies = {
+          'nvim-lua/plenary.nvim',
+          'nvim-tree/nvim-web-devicons',
+          'MunifTanjim/nui.nvim',
+          '3rd/image.nvim',
+      },
+      config = function ()
+          keymap('n', 'gf', ':Neotree toggle<CR>', {})
+          keymap('n', 'gB', ':Neotree toggle buffers<CR>', {})
+      end,
   },
 
   {

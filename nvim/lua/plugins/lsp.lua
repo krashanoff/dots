@@ -5,9 +5,10 @@ local keymap = vim.keymap.set
 
 return {
   -- Debug adapter stuff
-  require('plugins.dap'),
+  -- require('plugins.dap'),
 
   'neovim/nvim-lspconfig',
+
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -31,10 +32,17 @@ return {
   },
 
   {
-    "glepnir/lspsaga.nvim",
+    "nvimdev/lspsaga.nvim",
     event = "BufRead",
+    dependencies = { {"nvim-tree/nvim-web-devicons"} },
     config = function()
-      require("lspsaga").setup({})
+      require("lspsaga").setup({
+        finder = {
+          keys = {
+            vsplit = 'v'
+          }
+        }
+      })
 
       -- LSP finder - Find the symbol's definition
       -- If there is no definition, it will instead be hidden
@@ -51,26 +59,15 @@ return {
       -- Rename all occurrences of the hovered word for the selected files
       keymap("n", "gr", "<cmd>Lspsaga rename ++project<CR>")
 
-      -- Peek definition
+      -- Definitions and declarations
       -- You can edit the file containing the definition in the floating window
       -- It also supports open/vsplit/etc operations, do refer to "definition_action_keys"
       -- It also supports tagstack
       -- Use <C-t> to jump back
       keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>")
-
-      -- Go to definition
       keymap("n","gD", "<cmd>Lspsaga goto_definition<CR>")
-
-      -- Peek type definition
-      -- You can edit the file containing the type definition in the floating window
-      -- It also supports open/vsplit/etc operations, do refer to "definition_action_keys"
-      -- It also supports tagstack
-      -- Use <C-t> to jump back
       keymap("n", "gt", "<cmd>Lspsaga peek_type_definition<CR>")
-
-      -- Go to type definition
       keymap("n","gT", "<cmd>Lspsaga goto_type_definition<CR>")
-
 
       -- Show line diagnostics
       -- You can pass argument ++unfocus to
@@ -109,16 +106,12 @@ return {
       keymap("n", "T", "<cmd>Lspsaga hover_doc ++keep<CR>")
 
       -- Call hierarchy
-      keymap("n", "<Leader>ci", "<cmd>Lspsaga incoming_calls<CR>")
-      keymap("n", "<Leader>co", "<cmd>Lspsaga outgoing_calls<CR>")
-
-     -- Floating terminal
-      keymap({"n", "t"}, "<A-d>", "<cmd>Lspsaga term_toggle<CR>")
+      keymap("n", "gci", "<cmd>Lspsaga incoming_calls<CR>")
+      keymap("n", "gco", "<cmd>Lspsaga outgoing_calls<CR>")
 
       -- Finder (super handy!!!!)
       keymap({"n", "i"}, "<leader>F", "<cmd>Lspsaga finder<cr>")
     end,
-    dependencies = { {"nvim-tree/nvim-web-devicons"} }
   },
 
   {
