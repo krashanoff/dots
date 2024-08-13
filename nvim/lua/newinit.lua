@@ -2,28 +2,51 @@
 
 local PLUGINS_MODULE = "plugins"
 
--- Remove netrw
+-- Remove netrw, we use plugins instead.
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
-local api = vim.api
-local keymap = vim.keymap.set
-
--- IntelliJ sort of convinced me that space is a good leader.
-vim.g.mapleader = ';'
-
--- It's nice to be able to leader-cmd when we use colon.
-keymap('n', '<leader>x', ':x<CR>', {})
-
--- Register lua stuff for the langauge server.
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
 
 -- Need to have 24-bit color enabled so the UI isn't a nightmare tbh
 if os.getenv("TERM") == "xterm-256color" then
     vim.opt.termguicolors = true
 end
+vim.g.background = 'dark'
+
+local constants = require'constants'
+vim.g.mapleader = constants.LEADER
+
+local util = require'util'
+local keymap = util.keymap
+local mapl = util.mapl
+local mapl2 = util.mapl2
+local mapboth = util.mapboth
+
+-- Cancel operations with tab.
+keymap('o', '<tab>', '<esc>', {})
+
+-- IntelliJ sort of convinced me that space is a good leader,
+-- so there are a few keymaps where I use space out of habit.
+mapboth('n', 'w', ':w<CR>', {})
+
+-- Partial mouse support only
+vim.g.mouse = 'nv'
+vim.g.mousemodel = 'extend'
+
+-- The terminal escape pattern is kind of confusing, so use <leader><leader> instead.
+-- I used to bind <ESC> directly to this, but Lazygit likes to use it for its cancel
+-- operations.
+keymap('t', '<leader><leader>', '<C-\\><C-n>', {})
+
+-- It's nice to be able to leader-cmd when we use colon.
+mapl('n', 'xx', ':x<CR>', {})
+
+-- Delete a buffer.
+mapl('n', 'xb', ':bdel<CR>', {})
+
+-- Register lua stuff for the langauge server.
+local runtime_path = vim.split(package.path, ";")
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 
 -- Initialize all the plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

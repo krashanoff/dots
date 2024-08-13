@@ -45,6 +45,7 @@ return {
           '3rd/image.nvim',
       },
       config = function ()
+          keymap('n', '<leader>T', ':Neotree toggle<CR>', {})
           keymap('n', 'gf', ':Neotree toggle<CR>', {})
           keymap('n', 'gB', ':Neotree toggle buffers<CR>', {})
       end,
@@ -55,16 +56,13 @@ return {
     branch = 'main',
     dependencies = { 'nvim-tree/nvim-web-devicons', 'nvim-lua/plenary.nvim' },
     config = function()
-      local ok, cybu = pcall(require, 'cybu')
-      if not ok then
-          return
-      end
+      local cybu = require 'cybu'
       cybu.setup({
           display_time = 500,
       })
-      keymap("n", "K", "<Plug>(CybuPrev)")
-      keymap("n", "J", "<Plug>(CybuNext)")
-      -- vim.keymap.set({"n", "v"}, "<c-s-tab>", "<plug>(CybuLastusedPrev)")
+      keymap("n", "<C-K>", "<Plug>(CybuPrev)")
+      keymap("n", "<C-J>", "<Plug>(CybuNext)")
+      keymap({"n", "v"}, "<c-s-tab>", "<plug>(CybuLastusedPrev)")
       keymap({"n", "v"}, "<c-tab>", "<plug>(CybuLastusedNext)")
     end
   },

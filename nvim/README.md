@@ -1,6 +1,5 @@
 # nvim
 
-## Dependencies
+My Neovim configuration. Designed for being borderline liveable as an
+IDE, but not to completely replace it.
 
-* Neovim with python 3 support
-* python3-venv (used by CHADtree)

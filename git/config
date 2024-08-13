@@ -11,7 +11,7 @@
 	editor = nvim
 	pager = delta
 [delta]
-  navigate = true
+	navigate = true
 	line-numbers = true
 	hyperlinks = true
 [diff]
