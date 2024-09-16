@@ -4,9 +4,8 @@
 " Important pages:
 " - exclusive
 
-" Better leader and sane defaults
-let mapleader = ";"
-inoremap <silent><leader><return> ;<return>
+" plugins
+lua require('newinit')
 
 " hot reload
 nnoremap <silent><leader>src :source ~/.config/nvim/init.vim<cr>
@@ -20,16 +19,11 @@ nnoremap <silent><leader>inl :e ~/.config/nvim/lua/newinit.lua<cr>
 if !exists('g:syntax-on')
     syntax on
 end
-set ruler               " Show the line and column numbers of the cursor.
-set cursorline
 set formatoptions+=o    " Continue comment marker in new lines.
-set textwidth=0         " Hard-wrap long lines as you type them.
-set modeline            " Enable modeline.
 
 " Automatically toggle between absolute and hybrid line numbering schemes.
 " Use absolute when in insert mode, hybrid when in normal mode, and
 " absolute when we begin inputting some command.
-set number
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
@@ -87,9 +81,6 @@ set nowritebackup
 set breakindent
 set formatoptions=l
 set lbr
-
-" plugins
-lua require('newinit')
 
 let g:github_colors_soft = 1
 let g:github_colors_block_diffmark = 0
@@ -234,7 +225,9 @@ nnoremap <silent><leader>Wq <C-w>=
 nnoremap <silent><leader>tn :tabnew<cr>
 nnoremap <silent><leader>tc :tabclose<cr>
 nnoremap <silent><leader>ts :tab split<cr>
+nnoremap <silent><M-h> :tabp<cr>
 nnoremap <silent><M-;> :tabp<cr>
+nnoremap <silent><M-l> :tabn<cr>
 nnoremap <silent><M-'> :tabn<cr>
 
 " Make the terminal better.

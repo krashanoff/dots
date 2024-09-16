@@ -71,7 +71,7 @@ return {
         --lspconfig.clangd.setup({ capabilities = capabilities })
 
         -- Typescript
-        lspconfig.tsserver.setup({ capabilities = capabilities })
+        lspconfig.ts_ls.setup({ capabilities = capabilities })
 
         -- Python
         lspconfig.pyright.setup({ capabilities = capabilities })

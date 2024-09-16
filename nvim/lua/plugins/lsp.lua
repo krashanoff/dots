@@ -10,6 +10,13 @@ return {
   'neovim/nvim-lspconfig',
 
   {
+    "williamboman/mason.nvim",
+    config = function()
+      require'mason'.setup()
+    end,
+  },
+
+  {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
@@ -114,6 +121,7 @@ return {
     end,
   },
 
+--[[ UFO causes segfaults on TypeScript filetypes...
   {
     'kevinhwang91/nvim-ufo',
     dependencies = { 'kevinhwang91/promise-async' },
@@ -142,6 +150,8 @@ return {
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
     end,
   },
+]]--
+
   {
     "ray-x/go.nvim",
     dependencies = {  -- optional packages

@@ -1,8 +1,6 @@
 local api = vim.api
 
 return {
-  require('plugins.statusline'),
-
   'kshenoy/vim-signature',
   'tpope/vim-fugitive',
   'tpope/vim-sleuth',

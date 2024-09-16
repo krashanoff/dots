@@ -27,10 +27,20 @@ keymap('o', '<tab>', '<esc>', {})
 -- IntelliJ sort of convinced me that space is a good leader,
 -- so there are a few keymaps where I use space out of habit.
 mapboth('n', 'w', ':w<CR>', {})
+mapl2('n', 'l', ':Lazy<cr>', {})
+
+--
+--Base
+--
+vim.opt.ruler = true
+vim.opt.cursorline = true
+vim.opt.textwidth = 0
+vim.opt.modeline = true
+vim.opt.number = true
 
 -- Partial mouse support only
-vim.g.mouse = 'nv'
-vim.g.mousemodel = 'extend'
+vim.opt.mouse = 'nv'
+vim.opt.mousemodel = 'extend'
 
 -- The terminal escape pattern is kind of confusing, so use <leader><leader> instead.
 -- I used to bind <ESC> directly to this, but Lazygit likes to use it for its cancel
@@ -42,6 +52,9 @@ mapl('n', 'xx', ':x<CR>', {})
 
 -- Delete a buffer.
 mapl('n', 'xb', ':bdel<CR>', {})
+
+-- Statusline things
+require'statusline'()
 
 -- Register lua stuff for the langauge server.
 local runtime_path = vim.split(package.path, ";")

@@ -1,3 +1,5 @@
+-- Configuration constants for my setup.
+
 local M = {}
 
 M.LEADER = ';'
